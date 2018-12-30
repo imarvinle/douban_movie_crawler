@@ -1,0 +1,6 @@
+test.md
+.idea/*
+__pycache__/*
+.DS_Store
+
+*/__pycache__/*
