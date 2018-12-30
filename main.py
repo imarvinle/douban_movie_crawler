@@ -106,7 +106,7 @@ def main():
     for tag in tags:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
     pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue,
-                        commentqueue, db_queue, 2, 3, 0, 0, 6)
+                        commentqueue, db_queue, 2, 2, 0, 0, 8)
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))

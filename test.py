@@ -149,4 +149,10 @@ class MyOpener():
 # print(q.qsize())
 # q.get(block=False)
 # print(q.qsize())
-
+#
+# import sys
+# from importlib import reload
+#
+# print(sys.getdefaultencoding())
+# reload(sys)
+# sys('utf8')
