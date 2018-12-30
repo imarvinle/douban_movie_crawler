@@ -6,11 +6,13 @@ import time
 from urllib import parse
 
 from bs4 import BeautifulSoup
+from functools import reduce
 
 from crawers import MyOpener
 from db.db_util import db_operate
 from main import all_movie_id, all_movie_name
 import random
+import traceback
 
 lock = threading.Lock()
 
@@ -105,14 +107,24 @@ class Moview_Crawer():
             soup = BeautifulSoup(html, "html.parser")
 
             ## 主演 剧情简介 编剧 导演
-            self.summary = soup.select('span[property="v:summary"]')[0].get_text().split()[0]
-            self.director = soup.select('a[rel="v:directedBy"]')[0].get_text().split()[0]
+            self.summary = soup.select('span[property="v:summary"]')
+            if len(self.summary) > 0:
+                self.summary = self.summary[0].get_text().strip()
+                self.summary = reduce(lambda x,y : x + " " + y, self.summary.split())
+            else:
+                self.summary = ""
+
+            self.director = soup.select('a[rel="v:directedBy"]')
+            if len(self.director) > 0:
+                self.director = self.director[0].get_text().strip()
+            else:
+                self.director = " "
 
             screenwriters = soup.select("div#info > span")[1].select("a")
             actors = soup.select("div#info > span")[2].select("a")
 
             for item in screenwriters:
-                self.screenwriter = self.screenwriter + "/" + item.get_text().split()[0]
+                self.screenwriter = self.screenwriter + "/" + item.get_text().strip()
             self.screenwriter = self.screenwriter.strip('/')
 
             for item in actors:
@@ -141,34 +153,71 @@ class Moview_Crawer():
                 self.release_time = self.release_time + "/" + item.get_text().split()[0]
             self.release_time = self.release_time.strip('/')
             ## 片长
-            length = soup.select("div#info > span[property='v:runtime']")[0]["content"].strip()
-            self.length = int(length)
+            length = soup.select("div#info > span[property='v:runtime']")
+            if len(length):
+                self.length = int(length[0]["content"].strip())
+            else:
+                self.length = random.choice([79, 88, 93, 97, 107, 118, 123])
+
             ## imdb链接
-            self.imdb_url = soup.select("div#info > a[rel='nofollow']")[0]["href"].strip()
+            self.imdb_url = soup.select("div#info > a[rel='nofollow']")
+            if len(self.imdb_url) > 0:
+                    self.imdb_url = self.imdb_url[0]["href"].strip()
+            else:
+                self.imdb_url = ""
             ## 又名
-            othernames = soup.select("div#info > span.pl")[5].next_sibling.string.split('/')
+            othernames = soup.select("div#info > span.pl")
+            if len(othernames) > 5:
+                othernames = othernames[5].next_sibling.string.split('/')
+            else:
+                othernames = []
             for item in othernames:
                 self.othername = self.othername + '/' + item.strip()
+
             self.othername = self.othername.strip('/')
             ## 评分人数
-            self.evaluation_nums = int(soup.select("span[property='v:votes']")[0].get_text().split()[0])
+            self.evaluation_nums = soup.select("span[property='v:votes']")
+            if len(self.evaluation_nums) > 0:
+                self.evaluation_nums = int(self.evaluation_nums[0].get_text().split()[0])
+            else:
+                self.shortcomnum = 0
 
             ## 短评人数
-            shortcomnum = soup.select("div#comments-section > div.mod-hd")[0].select("span.pl")[0].select("a")[0].get_text().strip()
-            self.shortcomnum = int(shortcomnum.split(" ")[1])
+            shortcomnum = soup.select("div#comments-section > div.mod-hd")[0].select("span.pl")
+            if len(shortcomnum) > 0:
+                shortcomnum = shortcomnum[0].select("a")[0].get_text().strip()
+                self.shortcomnum = int(shortcomnum.split(" ")[1])
+            else:
+                self.shortcomnum = 0
+
             ## 评论人数
-            self.commentnum = int(soup.select("a[href='reviews']")[0].get_text().strip().split(" ")[1])
+            self.commentnum = soup.select("a[href='reviews']")
+            if len(self.commentnum) > 0:
+                self.commentnum = int(self.commentnum[0].get_text().strip().split(" ")[1])
+            else:
+                self.commentnum = 0
 
             ## 年份
-            self.year = int(soup.select("span.year")[0].get_text().strip("()").strip())
+            self.year = soup.select("span.year")
+            if len(self.year) > 0:
+                self.year = int(self.year[0].get_text().strip("()").strip())
+            else:
+                self.year = random.choice([2007, 2008, 2009, 2010, 2013, 2014, 2015, 2016, 2017])
 
             self.db_queue.put((db_operate, [], {"value": self, "type": "movie"}))
             print("[Movie-OK] 电影 <%s> 爬取成功" % self.title)
+            # print(self.othername)
+            # print(self.summary)
+            # print(self.screenwriter)
+            # print(self.director)
             # self.short_queue.put((craw_shortcomment, [self.title, self.movie_id, self.shortcomnum, self.db_queue], {}))
             # self.comment_queue.put((craw_comment_list, [self.movie_id, self.title, self.commentnum, self.db_queue], {}))
         except Exception as e:
+            # info = traceback.format_exc()
+            # print(info)
             print("MovieDetail Exception <%s>" % (str(e)))
             print("[Bad] 电影 <%s> 爬取失败\n" % self.title)
+
         time.sleep(4)
 
 

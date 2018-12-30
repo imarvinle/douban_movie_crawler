@@ -27,7 +27,6 @@ class MyThread(threading.Thread):
                     print("---------当前还有 %d 部电影待爬取-------" % self.workqueue.qsize())
                 elif self.taskname == "[电影ID获取]":
                     print("---------当前还有 %d 种类型电影分类待爬取-------" % self.workqueue.qsize())
-
                 try:
                     func(*args, **kwargs)
                 except Exception as e:

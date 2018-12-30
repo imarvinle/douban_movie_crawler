@@ -156,3 +156,8 @@ class MyOpener():
 # print(sys.getdefaultencoding())
 # reload(sys)
 # sys('utf8')
+
+from crawers.movie import Moview_Crawer
+
+craw = Moview_Crawer(2295783)
+craw.get_movie_detail()

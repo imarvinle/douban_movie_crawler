@@ -90,10 +90,10 @@ def main():
     tags.update(new_tags)
 
     print("共有: %d 类电影" % len(tags))
-    movie_tag_queue = Queue(100)
-    movie_queue = Queue(30000)
-    shortqueue = Queue(30000)
-    commentqueue = Queue(30000)
+    movie_tag_queue = Queue(200)
+    movie_queue = Queue(40000)
+    shortqueue = Queue(2000)
+    commentqueue = Queue(2000)
     db_queue = Queue(50000)
 
     # # 加入影评队列
@@ -108,7 +108,7 @@ def main():
     for tag in tags:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
     pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue,
-                        commentqueue, db_queue, 2, 2, 0, 0, 8)
+                        commentqueue, db_queue, 1, 3, 0, 0, 1)
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))

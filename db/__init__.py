@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 from db.model import Base
 
-engine = create_engine('mysql+pymysql://root:password@39.108.123.85:3306/ww?charset=utf8mb4')
+engine = create_engine('mysql+pymysql://root:password@39.108.123.85:3306/doubancrawtest?charset=utf8mb4')
 
 Base.metadata.create_all(engine)
 
