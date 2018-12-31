@@ -27,7 +27,6 @@ def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
     start = 0
     opener = MyOpener("[%s标签包含电影抓取]" % tag)
     scores = [4.5, 5.6, 7.8, 8.9, 9.6]
-
     while True:
         url = "http://movie.douban.com/j/search_subjects?type=movie&tag=" + tag + "&page_limit=20&page_start=" + str(start)
         url = parse.quote(url, safe='/:?=&')

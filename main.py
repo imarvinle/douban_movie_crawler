@@ -12,12 +12,7 @@ from crawers.shortcomment import craw_shortcomment
 from crawers import MyOpener
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
-from importlib import reload
 
-
-import sys
-
-reload(sys)
 
 all_movie_id = set()
 all_movie_name = set()
