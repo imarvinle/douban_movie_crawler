@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
+
+'''
+-------------------------------------------------
+   Description :  定义ORM模型
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
+
+
 from sqlalchemy import Column, String, Text, Integer, Table, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref

@@ -1,18 +1,22 @@
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
 
-from crawers import headers
-import urllib
-import requests
+'''
+-------------------------------------------------
+   Description :  此文件仅用来测试一些小功能，暂未使用
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
+
 import json
-from urllib import  *
 import time
-from http import cookiejar
-from crawers.shortcomment import ShortComment_Crawer
-from crawers.comment import craw_comment_list
-from bs4 import BeautifulSoup
-import random
-import string
 from urllib import parse
+
+import requests
+
 from crawers import MyOpener as Opner
+
 
 def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
     start = 0

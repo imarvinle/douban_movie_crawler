@@ -1,26 +1,31 @@
-# -*-coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
+
+'''
+-------------------------------------------------
+   Description : 使用threading、Queue简单构建了一个线程池
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
 
 import threading
 import time
 
-isend = False
-
 class MyThread(threading.Thread):
 
-    # 创建并启动线程
+    # 创建同时启动线程
     def __init__(self, workqueue, taskname=""):
         threading.Thread.__init__(self)
         self.taskname = taskname
         self.workqueue = workqueue
         self.start()
 
-
-
     def run(self):
         no_task = 0
         while True:  # 除非确认队列中已经无任务，否则时刻保持线程在运行
             try:
-                func, args, kwargs = self.workqueue.get(block=isend)  # 如果队列空了，直接结束线程。根据是否还有任务
+                func, args, kwargs = self.workqueue.get(block=False)  # 如果队列空了，直接结束线程。根据是否还有任务
                 if self.taskname == "[数据库插入]":
                     print("---------当前还有 %d 条数据待插入数据库-------\n" % self.workqueue.qsize())
                 elif self.taskname == "[电影详细信息]":
@@ -51,12 +56,11 @@ class MyThread(threading.Thread):
 
 class MyThreadPool():
 
-    def __init__(self, movie_tag_queque, movie_queue, shortqueue, commentqueue, db_queue, movie_tag_size, movie_size, short_size, comment_size, db_size=5):
+    def __init__(self, movie_tag_queque, movie_queue, shortqueue, commentqueue, db_queue, movie_tag_size, movie_size, short_size, comment_size, db_size):
         self.movie_queue = movie_queue
         self.shortqueue = shortqueue
         self.commentqueue = commentqueue
         self.movielistqueque = movie_tag_queque
-        self.db_size = db_size
         self.pool = []
         print("-----------创建线程池 包含 %d 个工作线程-----------\n" % (movie_tag_size + movie_size + short_size + comment_size))
         for i in range(movie_tag_size):
@@ -75,15 +79,14 @@ class MyThreadPool():
             self.pool.append(MyThread(commentqueue, taskname="[影评获取]"))
         print("-----------抓取电影评论信息共 %d 个线程创建完毕-----------\n" % (comment_size))
 
-        for i in range(self.db_size):
+        for i in range(db_size):
             self.pool.append(MyThread(db_queue, taskname="[数据库插入]"))
-        print("-----------数据库插入共 %d 个线程创建完毕-----------\n" % (self.db_size))
+        print("-----------数据库插入共 %d 个线程创建完毕-----------\n" % (db_size))
 
     def joinAll(self):
         for thread in self.pool:
             if thread.isAlive():
                 thread.join()
-
 
 
 if __name__ == '__main__':

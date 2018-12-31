@@ -1,5 +1,13 @@
-#-*- coding：utf-8 -*-
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
 
+'''
+-------------------------------------------------
+   Description :  启动文件
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
 
 from queue import Queue
 
@@ -10,9 +18,9 @@ from storage.model import Movie, ShortCommentCrawed, CommentCrawed
 from crawers.comment import craw_comment_list
 from crawers.shortcomment import craw_shortcomment
 from crawers import MyOpener
+from config import TagThreadSize, MovieThreadSize, ShortCommentSize, CommentSize, DataBaseInsertSize
+
 ISOTIMEFORMAT='%Y-%m-%d %X'
-
-
 
 all_movie_id = set()
 all_movie_name = set()
@@ -80,7 +88,6 @@ def main():
         print("\nBye")
         return
 
-    #Login()
     r = MyOpener("tag").open("http://movie.douban.com/j/search_tags?type=movie&source=")
     if not r["result"]:
         print("tag获取失败")
@@ -92,34 +99,29 @@ def main():
 
     print("共有: %d 类电影" % len(tags))
     movie_tag_queue = Queue(2000)
-    movie_queue = Queue(20000)
-    shortqueue = Queue(20000)
-    commentqueue = Queue(20000)
+    movie_queue = Queue(40000)
+    shortqueue = Queue(40000)
+    commentqueue = Queue(40000)
     db_queue = Queue(100000)
 
-    # 加入影评队列
-    # for id in comment_id:
-    #     movie = movie_map[id]
-    #     commentqueue.put((craw_comment_list, [id, movie['name'], movie['comnum'], db_queue], {}))
-    #
-    # # 加入短评队列
-    # for id in short_id:
-    #     movie = movie_map[id]
-    #     shortqueue.put((craw_shortcomment, [id, movie['name'], movie['shortnum'], db_queue], {}))
+    #加入影评队列
+    for id in comment_id:
+        movie = movie_map[id]
+        commentqueue.put((craw_comment_list, [id, movie['name'], movie['comnum'], db_queue], {}))
+
+    # 加入短评队列
+    for id in short_id:
+        movie = movie_map[id]
+        shortqueue.put((craw_shortcomment, [id, movie['name'], movie['shortnum'], db_queue], {}))
     for tag in tags:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
-    pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue,
-                        commentqueue, db_queue, 1, 4, 0, 0, 1)
+
+    pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue, commentqueue, db_queue, TagThreadSize,
+                        MovieThreadSize, ShortCommentSize,CommentSize,DataBaseInsertSize)
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
 
 
 if __name__ == "__main__":
-    #doLogin()
-    # crawer = Moview_Crawer(opener, 27073234, title="大象席地而坐", score=7.9, cover="baidu.com")
-    # crawer.get_movie_detail()
     main()
-    #doLogin()
-    #craw_shortcomment("无双", 26425063, 125660,None)
-    #craw_comment_list(27172891, "大象席地而坐", 851)

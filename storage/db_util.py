@@ -1,11 +1,18 @@
-# -*-coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
+
+'''
+-------------------------------------------------
+   Description :  数据库插入操作
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
+
 from storage import Session
-from storage.model import Movie, Tag, Country, Comment, Language, ENCountry
+from storage.model import Movie, Tag, Country, Language, ENCountry
 from storage.map_config import nameMap
 
-language_map = {"汉语普通话": "汉语", "美国": "英语", "加拿大": "英语", "四川话": "汉语", "山西话": "汉语", "俄罗斯": "俄语",
-                "印度": "印度语", "中国大陆": "汉语", "德国": "德语", "香港": "粤语", "意大利": "意大利语", "英国": "英语",
-                "日本": "日语", "西安话": "汉语", "台湾": "汉语", "南京话": "汉语", "上海话": "汉语", "唐山话": "汉语", "韩国": "汉语"}
 
 def db_operate(type = None, value = None):
         session = Session()

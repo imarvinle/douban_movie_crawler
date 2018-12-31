@@ -1,10 +1,17 @@
-# -*-coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
 
-import re
+'''
+-------------------------------------------------
+   Description :  简单封装网络请求，后期可支持扩展代理，随机化请求头，定期更换cookies
+   Author :       lichunlin
+   date：          2018/12/31
+-------------------------------------------------
+'''
+
+import random
 import requests
-from bs4 import BeautifulSoup
-# from matplotlib import pyplot
-import random, time
+
 user_agent = [
     "Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1)\
                 Gecko/20061208 Firefox/2.0.0 Opera 9.50",
@@ -86,7 +93,7 @@ class MyOpener():
                     print("[Opener-%s] 多次出现异常" % (self.taskname))
                     return {"result": False, "data": None}
 
-#
+#   取消模拟登陆
 # def Login():
 #     login_url = 'https://accounts.douban.com/login?source=movie'
 #     form_data = {
@@ -131,5 +138,4 @@ class MyOpener():
 
 
 if __name__ == "__main__":
-    while True:
-        get_session()
+    pass

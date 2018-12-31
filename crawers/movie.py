@@ -1,5 +1,15 @@
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
 
-# cookies和请求处理
+'''
+-------------------------------------------------
+   Description :  抓取电影列表和电影详细信息
+   Author :       lichunlin
+   date：          2018/12/30
+-------------------------------------------------
+'''
+
+
 import json
 import threading
 import time
@@ -220,6 +230,6 @@ class Moview_Crawer():
             print("MovieDetail Exception <%s>" % (str(e)))
             print("[Movie-Bad] 电影 <%s> 爬取失败\n" % self.title)
 
-        time.sleep(3)
+        time.sleep(2)
 
 

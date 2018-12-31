@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
+# !/usr/bin/env python
 
-# cookies处理
+'''
+-------------------------------------------------
+   Description :  抓取电影短评
+   Author :       lichunlin
+   date：          2018/12/30
+-------------------------------------------------
+'''
 
-# 编码信息，生成请求，打开页面获取内容
+
 from bs4 import BeautifulSoup
-
 from crawers import MyOpener
 from storage.db_util import db_operate
 import time

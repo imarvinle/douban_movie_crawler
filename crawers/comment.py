@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
+# !/usr/bin/env python
+
+'''
+-------------------------------------------------
+   Description :  爬取电影评论
+   Author :       lichunlin
+   date：          2018/12/30
+-------------------------------------------------
+'''
 
 import re
 import time
 import traceback
-
-# 编码信息，生成请求，打开页面获取内容
 from bs4 import BeautifulSoup
-
 from storage.db_util import db_operate
 from crawers import MyOpener
 from storage.model import CommentCrawed, Comment
 
-# cookies处理
 
 
 def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
