@@ -65,7 +65,7 @@ def main():
     # 求差集合
     print("********** START **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
-    print(u"********** 统计信息 *********")
+    print("**********统计信息 *********")
     print("已经抓取 %d 部电影" % len(all_movie_name))
     print("已经抓取短评的电影有 %d 部" % len(short_id))
     print("已经抓取评论的电影有 %d 部" % len(comment_id))
