@@ -1,8 +1,8 @@
-# -*-coding: utf-8 -*-
+#-*- coding：utf-8 -*-
+
 
 from queue import Queue
 
-from crawers import Login
 from crawers.movie import *
 from thread.thread_pool import *
 from db import Session
@@ -12,6 +12,12 @@ from crawers.shortcomment import craw_shortcomment
 from crawers import MyOpener
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
+from importlib import reload
+
+
+import sys
+
+reload(sys)
 
 all_movie_id = set()
 all_movie_name = set()
@@ -64,7 +70,7 @@ def main():
     # 求差集合
     print("********** START **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
-    print("********** 统计信息 *********")
+    print(u"********** 统计信息 *********")
     print("已经抓取 %d 部电影" % len(all_movie_name))
     print("已经抓取短评的电影有 %d 部" % len(short_id))
     print("已经抓取评论的电影有 %d 部" % len(comment_id))
@@ -90,25 +96,25 @@ def main():
     tags.update(new_tags)
 
     print("共有: %d 类电影" % len(tags))
-    movie_tag_queue = Queue(200)
-    movie_queue = Queue(40000)
-    shortqueue = Queue(2000)
-    commentqueue = Queue(2000)
-    db_queue = Queue(50000)
+    movie_tag_queue = Queue(2000)
+    movie_queue = Queue(20000)
+    shortqueue = Queue(20000)
+    commentqueue = Queue(20000)
+    db_queue = Queue(100000)
 
-    # # 加入影评队列
+    # 加入影评队列
     # for id in comment_id:
     #     movie = movie_map[id]
-    #     commentqueue.put((craw_comment_list, [movie['name'], id, movie['comnum'], db_queue, None], {}))
+    #     commentqueue.put((craw_comment_list, [id, movie['name'], movie['comnum'], db_queue], {}))
     #
     # # 加入短评队列
-    # for id in comment_id:
+    # for id in short_id:
     #     movie = movie_map[id]
-    #     shortqueue.put((craw_shortcomment, [movie['name'], id, movie['shortnum'], db_queue, None], {}))
+    #     shortqueue.put((craw_shortcomment, [id, movie['name'], movie['shortnum'], db_queue], {}))
     for tag in tags:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
     pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue,
-                        commentqueue, db_queue, 1, 3, 0, 0, 1)
+                        commentqueue, db_queue, 1, 4, 0, 0, 1)
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))

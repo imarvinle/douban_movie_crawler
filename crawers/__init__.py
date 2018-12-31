@@ -3,7 +3,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from matplotlib import pyplot
+# from matplotlib import pyplot
 import random, time
 user_agent = [
     "Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1)\
@@ -86,48 +86,48 @@ class MyOpener():
                     print("[Opener-%s] 多次出现异常" % (self.taskname))
                     return {"result": False, "data": None}
 
-
-def Login():
-    login_url = 'https://accounts.douban.com/login?source=movie'
-    form_data = {
-        "form_email": "17738729175",
-        "form_password": "lcldouban123",
-        "source": "movie",
-        "redir": "https://movie.douban.com/",
-        "login": "登录"
-    }
-    request_session = get_session()
-
-    html = request_session.get(login_url).text
-    soup = BeautifulSoup(html, "html.parser")
-    if soup.find('img', id='captcha_image'):
-        print("有验证码")
-        # 获取验证码图片地址
-        captcha_url = soup.find('img', id='captcha_image')['src']
-        # 匹配验证码id
-        reCaptchaID = r'<input type="hidden" name="captcha-id" value="(.*?)"/'
-        captchaID = re.findall(reCaptchaID, html)
-        # 下载验证码图片
-        resp_img = request_session.get(captcha_url).content
-        with open("captcha.jpg", "wb") as file:
-            file.write(resp_img)
-        img = pyplot.imread("captcha.jpg")
-        pyplot.imshow(img)
-        pyplot.axis('off')
-        pyplot.show()
-        # 输入验证码并加入提交信息中，重新编码提交获得页面内容
-        captcha = input('please input the captcha:')
-        form_data['captcha-solution'] = captcha
-        form_data['captcha-id'] = captchaID[0]
-        login_url= 'https://accounts.douban.com/login'
-
-        login_success = request_session.post(login_url, data=form_data)
-        print(request_session.cookies)
-        print("登陆成功<%d>" % login_success.status_code)
-        return request_session
-    else:
-        print("未登陆")
-        return None
+#
+# def Login():
+#     login_url = 'https://accounts.douban.com/login?source=movie'
+#     form_data = {
+#         "form_email": "17738729175",
+#         "form_password": "lcldouban123",
+#         "source": "movie",
+#         "redir": "https://movie.douban.com/",
+#         "login": "登录"
+#     }
+#     request_session = get_session()
+#
+#     html = request_session.get(login_url).text
+#     soup = BeautifulSoup(html, "html.parser")
+#     if soup.find('img', id='captcha_image'):
+#         print("有验证码")
+#         # 获取验证码图片地址
+#         captcha_url = soup.find('img', id='captcha_image')['src']
+#         # 匹配验证码id
+#         reCaptchaID = r'<input type="hidden" name="captcha-id" value="(.*?)"/'
+#         captchaID = re.findall(reCaptchaID, html)
+#         # 下载验证码图片
+#         resp_img = request_session.get(captcha_url).content
+#         with open("captcha.jpg", "wb") as file:
+#             file.write(resp_img)
+#         img = pyplot.imread("captcha.jpg")
+#         pyplot.imshow(img)
+#         pyplot.axis('off')
+#         pyplot.show()
+#         # 输入验证码并加入提交信息中，重新编码提交获得页面内容
+#         captcha = input('please input the captcha:')
+#         form_data['captcha-solution'] = captcha
+#         form_data['captcha-id'] = captchaID[0]
+#         login_url= 'https://accounts.douban.com/login'
+#
+#         login_success = request_session.post(login_url, data=form_data)
+#         print(request_session.cookies)
+#         print("登陆成功<%d>" % login_success.status_code)
+#         return request_session
+#     else:
+#         print("未登陆")
+#         return None
 
 
 if __name__ == "__main__":

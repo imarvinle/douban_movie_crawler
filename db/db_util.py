@@ -3,9 +3,9 @@ from db import Session
 from db.model import Movie, Tag, Country, Comment, Language, ENCountry
 from db.map_config import nameMap
 
-language_map = {"汉语普通话": "汉语", "美国": "英语", "加拿大": "英语","四川话": "汉语", "山西话": "汉语", "俄罗斯":"俄语",
-                "印度": "印度语","中国大陆": "汉语", "德国": "德语", "香港":"粤语", "意大利":"意大利语", "英国":"英语", "日本":"日语",
-                "西安话" : "汉语", "台湾" : "汉语", "南京话": "汉语", "上海话": "汉语", "唐山话": "汉语", "韩国" : "汉语"}
+language_map = {"汉语普通话": "汉语", "美国": "英语", "加拿大": "英语", "四川话": "汉语", "山西话": "汉语", "俄罗斯": "俄语",
+                "印度": "印度语", "中国大陆": "汉语", "德国": "德语", "香港": "粤语", "意大利": "意大利语", "英国": "英语",
+                "日本": "日语", "西安话": "汉语", "台湾": "汉语", "南京话": "汉语", "上海话": "汉语", "唐山话": "汉语", "韩国": "汉语"}
 
 def db_operate(type = None, value = None):
         session = Session()
@@ -75,7 +75,7 @@ class DB_Helper():
         except Exception as e:
             self.session.rollback()
             self.session.close()
-            print("插入数据出错[%s]" % (str(new_movie)))
+            print("电影插入出错[%s]" % (str(new_movie)))
             print("DB Error  <%s>" % str(e))
 
 
@@ -83,43 +83,46 @@ class DB_Helper():
         try:
             self.session.add_all(short_list)
             self.session.commit()
+            print("[短评-OK] %d 条短评已插入数据库\n" % len(short_list))
+
         except Exception as e:
             self.session.rollback()
             self.session.close()
-            print("插入数据出错[%d 条短评]" % (len(short_list)))
+            print("短评插入出错[%d 条短评]" % (len(short_list)))
             print("DB Error  <%s>" % str(e))
 
-    def insert_comment(self, comment):
-        new_comment = None
+    def insert_comment(self, comment_list):
         try:
-            new_comment = Comment(comment['movie_name'], comment['nickname'], comment['time'], comment['content'], comment['usednum'],
-                              comment['unusednum'], comment['responsenum'])
-            self.session.add(new_comment)
+
+            self.session.add_all(comment_list)
+            print("[影评-OK] %d 条影评已插入数据库\n" % len(comment_list))
             self.session.commit()
         except Exception as e:
             self.session.rollback()
             self.session.close()
-            print("插入数据出错[%s]" % (str(new_comment)))
+            print("影评插入数据出错[%d条影评]" % len(comment_list))
             print("DB Error  <%s>" % str(e))
 
     def insert_shortcrawed(self, shortcrawed):
         try:
             self.session.add(shortcrawed)
             self.session.commit()
+            print("电影[%s] 短评已全部插入数据库\n" % shortcrawed.movie_name)
         except Exception as e:
             self.session.rollback()
             self.session.close()
-            print("插入数据出错[%s]" % (str(shortcrawed)))
+            print("短评标记插入出错[%s]" % (str(shortcrawed)))
             print("DB Error  <%s>" % str(e))
 
     def insert_commentcrawed(self, commentcrawed):
         try:
             self.session.add(commentcrawed)
             self.session.commit()
+            print("电影[%s] 影评已全部插入数据库\n" % commentcrawed.movie_name)
         except Exception as e:
             self.session.rollback()
             self.session.close()
-            print("插入数据出错[%s]" % (str(commentcrawed)))
+            print("影评标记插入出错 [%s]" % (str(commentcrawed)))
             print("DB Error  <%s>" % str(e))
 
 

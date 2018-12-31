@@ -145,7 +145,7 @@ class ShortComment(Base):
         self.likenum = likenum
 
     def __repr__(self):
-        return '<ShortCom %s %s %s  %d>' % (self.movie_name, self.nickname, self.time, self.likenum)
+        return '<ShortCom 电影:%s 评论者:%s 评论时间:%s>' % (self.movie_name, self.nickname, self.time)
 
 
 class Comment(Base):
@@ -179,7 +179,8 @@ class Comment(Base):
 
 class CommentCrawed(Base):
     __tablename__ = "commentcrawed"
-    movie_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    movie_id = Column(Integer, nullable=True)
     movie_name = Column(String(60), nullable=True)
 
     def __init__(self, movie_id, movie_name):
@@ -192,7 +193,8 @@ class CommentCrawed(Base):
 
 class ShortCommentCrawed(Base):
     __tablename__ = "shortcrawed"
-    movie_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    movie_id = Column(Integer, nullable=True)
     movie_name = Column(String(60), nullable=True)
 
     def __init__(self, movie_id, movie_name):

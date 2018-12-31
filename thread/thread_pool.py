@@ -22,15 +22,19 @@ class MyThread(threading.Thread):
             try:
                 func, args, kwargs = self.workqueue.get(block=isend)  # 如果队列空了，直接结束线程。根据是否还有任务
                 if self.taskname == "[数据库插入]":
-                    print("---------当前还有 %d 条电影数据待插入-------" % self.workqueue.qsize())
+                    print("---------当前还有 %d 条数据待插入数据库-------\n" % self.workqueue.qsize())
                 elif self.taskname == "[电影详细信息]":
-                    print("---------当前还有 %d 部电影待爬取-------" % self.workqueue.qsize())
+                    print("---------当前还有 %d 部电影待爬取-------\n" % self.workqueue.qsize())
                 elif self.taskname == "[电影ID获取]":
-                    print("---------当前还有 %d 种类型电影分类待爬取-------" % self.workqueue.qsize())
+                    print("---------当前还有 %d 种类型电影分类待爬取-------\n" % self.workqueue.qsize())
+                elif self.taskname == "[短评获取]":
+                    print("---------当前还有 %d  部 电影短评 待爬取-------\n" % self.workqueue.qsize())
+                elif self.taskname == "[影评获取]":
+                    print("---------当前还有 %d  部 电影影评 待爬取-------\n" % self.workqueue.qsize())
                 try:
                     func(*args, **kwargs)
                 except Exception as e:
-                    print('bad execution: %s' % (str(e)))
+                    print('bad execution: %s\n' % (str(e)))
                 no_task = 0
                 self.workqueue.task_done()
                 #print("%s 线程-%s完成一个任务，马上领取下一个任务\n" % (self.taskname, self.getName()))

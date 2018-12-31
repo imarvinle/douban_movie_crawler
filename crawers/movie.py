@@ -11,6 +11,9 @@ from functools import reduce
 from crawers import MyOpener
 from db.db_util import db_operate
 from main import all_movie_id, all_movie_name
+from crawers.shortcomment import craw_shortcomment
+from crawers.comment import craw_comment_list
+
 import random
 import traceback
 
@@ -53,7 +56,7 @@ def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
                         all_movie_name.add(title)
                         movie_queue.put((craw_movie_detail, [id, cover, title, score, short_queue, comment_queue, db_queue], {}))
                     else:
-                        print("发现重复电影[%s]" % title)
+                        print("发现重复电影[%s]\n" % title)
                 finally:
                     lock.release()
         start = start + 20
@@ -205,7 +208,7 @@ class Moview_Crawer():
                 self.year = random.choice([2007, 2008, 2009, 2010, 2013, 2014, 2015, 2016, 2017])
 
             self.db_queue.put((db_operate, [], {"value": self, "type": "movie"}))
-            print("[Movie-OK] 电影 <%s> 爬取成功" % self.title)
+            print("[Movie-OK] 电影 <%s> 爬取成功\n" % self.title)
             # print(self.othername)
             # print(self.summary)
             # print(self.screenwriter)
@@ -216,8 +219,8 @@ class Moview_Crawer():
             # info = traceback.format_exc()
             # print(info)
             print("MovieDetail Exception <%s>" % (str(e)))
-            print("[Bad] 电影 <%s> 爬取失败\n" % self.title)
+            print("[Movie-Bad] 电影 <%s> 爬取失败\n" % self.title)
 
-        time.sleep(4)
+        time.sleep(3)
 
 

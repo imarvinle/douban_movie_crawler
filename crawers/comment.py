@@ -9,14 +9,16 @@ from bs4 import BeautifulSoup
 
 from db.db_util import db_operate
 from crawers import MyOpener
-
+from db.model import CommentCrawed, Comment
 
 # cookies处理
 
 
 def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
     errornum = 0
-    opener = MyOpener("[%s]影评")
+    comment_crawed = CommentCrawed(movie_id, movie_name)
+    opener = MyOpener("[%s]影评" % movie_name)
+    comment_list = []
     pagenum = commentnum // 20
     if pagenum % 20 > 0:
          pagenum = pagenum + 1
@@ -24,7 +26,7 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
         print("********** 正在爬取电影 <%s> 的第 %d 页的影评**********\n" % (movie_name, i+1))
         url = "https://movie.douban.com/subject/%d/reviews?sort=hotest&start=%d" % (movie_id, 20 * i)
 
-        if i > 20:
+        if i > 10:
             break
         res = opener.open(url)
 
@@ -43,42 +45,46 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
             review_list = soup.select("div.review-list  ")[0]
             review_list = review_list.select("> div")
             for review_item in review_list:
-                nickname = review_item.select("a.name")[0].get_text().split()[0]
-                _time = review_item.select("span.main-meta")[0].get_text().split()[0]
-                content = review_item.select("div.short-content")[0].get_text().split()[0]
-                actions = review_item.select("div.action > a")
-                usednum = 0
-                unusednum = 0
-                used = actions[0].select("span")[0].get_text().split()
-                if used:
-                    usednum = int(used[0])
-                unused = actions[1].select("span")[0].get_text().split()
+                try:
+                    nickname = review_item.select("a.name")[0].get_text().split()[0]
+                    _time = review_item.select("span.main-meta")[0].get_text().split()[0]
+                    content = review_item.select("div.short-content")[0].get_text().split()[0]
+                    actions = review_item.select("div.action > a")
+                    usednum = 0
+                    unusednum = 0
+                    used = actions[0].select("span")[0].get_text().split()
+                    if used:
+                        usednum = int(used[0])
+                    unused = actions[1].select("span")[0].get_text().split()
 
-                if unused:
-                    unusednum = int(unused[0])
-                responsestr = actions[2].get_text().split()[0]
+                    if unused:
+                        unusednum = int(unused[0])
+                    responsestr = actions[2].get_text().split()[0]
+                    responsenum = int(re.compile(r'[0-9]\d*').findall(responsestr)[0])
 
-                responsenum = int(re.compile(r'[0-9]\d*').findall(responsestr)[0])
+                    comment = Comment(movie_name, nickname, _time, content, usednum, unusednum, responsenum)
 
-                comment = {
-                    "movie_name": movie_name,
-                    "nickname": nickname,
-                    "time": _time,
-                    "content": content,
-                    "usednum": usednum,
-                    "unusednum" : unusednum,
-                    "responsenum": responsenum
-                }
-                with open("pinglun.txt", "a") as file:
-                    file.write(str(comment))
-                    file.write("\n")
+                    comment_list.append(comment)
+                except Exception as e:
+                    print("解析电影<%s> 第 %d 页影评出错\n" %(movie_name, i+1))
+                    continue
 
-                db_queue.put((db_operate, [], {"value": comment, "type": "comment"}))
+            if i % 4 == 0:
+                db_queue.put((db_operate, [], {"value": comment_list, "type": "comment"}))
+                comment_list = []
         except Exception as e:
             info = traceback.format_exc()
-            print("[%s]评论爬取异常, 停止爬取" % str(e))
-            break
-        time.sleep(4)
+            print(info)
+            errornum = errornum + 1
+            if errornum > 3:
+                print(" 停止爬取电影 <%s> 影评共爬取 %d 页\n" % (movie_name, i))
+                break
+            else:
+                continue
+        time.sleep(2)
+    if len(comment_list) > 0:
+        db_queue.put((db_operate, [], {"value": comment_list, "type": "comment"}))
+    db_queue.put((db_operate, [], {"value": comment_crawed, "type": "commentid"}))
 
 
 
