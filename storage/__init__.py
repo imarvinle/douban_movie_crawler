@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from db.model import Base
+from storage.model import Base
 
 engine = create_engine('mysql+pymysql://root:password@39.108.123.85:3306/douban?charset=utf8mb4')
 

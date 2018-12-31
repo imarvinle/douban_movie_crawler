@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from functools import reduce
 
 from crawers import MyOpener
-from db.db_util import db_operate
+from storage.db_util import db_operate
 from main import all_movie_id, all_movie_name
 from crawers.shortcomment import craw_shortcomment
 from crawers.comment import craw_comment_list

@@ -6,9 +6,9 @@
 from bs4 import BeautifulSoup
 
 from crawers import MyOpener
-from db.db_util import db_operate
+from storage.db_util import db_operate
 import time
-from db.model import ShortComment, ShortCommentCrawed
+from storage.model import ShortComment, ShortCommentCrawed
 import traceback
 
 def craw_shortcomment(movie_id, movie_name, shortcomnum, db_queue):

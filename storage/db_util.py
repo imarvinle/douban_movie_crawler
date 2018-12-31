@@ -1,7 +1,7 @@
 # -*-coding: utf-8 -*-
-from db import Session
-from db.model import Movie, Tag, Country, Comment, Language, ENCountry
-from db.map_config import nameMap
+from storage import Session
+from storage.model import Movie, Tag, Country, Comment, Language, ENCountry
+from storage.map_config import nameMap
 
 language_map = {"汉语普通话": "汉语", "美国": "英语", "加拿大": "英语", "四川话": "汉语", "山西话": "汉语", "俄罗斯": "俄语",
                 "印度": "印度语", "中国大陆": "汉语", "德国": "德语", "香港": "粤语", "意大利": "意大利语", "英国": "英语",

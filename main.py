@@ -5,8 +5,8 @@ from queue import Queue
 
 from crawers.movie import *
 from thread.thread_pool import *
-from db import Session
-from db.model import Movie, ShortCommentCrawed, CommentCrawed
+from storage import Session
+from storage.model import Movie, ShortCommentCrawed, CommentCrawed
 from crawers.comment import craw_comment_list
 from crawers.shortcomment import craw_shortcomment
 from crawers import MyOpener

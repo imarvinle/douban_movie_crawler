@@ -7,9 +7,9 @@ import traceback
 # 编码信息，生成请求，打开页面获取内容
 from bs4 import BeautifulSoup
 
-from db.db_util import db_operate
+from storage.db_util import db_operate
 from crawers import MyOpener
-from db.model import CommentCrawed, Comment
+from storage.model import CommentCrawed, Comment
 
 # cookies处理
 
