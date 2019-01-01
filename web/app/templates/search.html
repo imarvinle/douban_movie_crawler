@@ -1,0 +1,257 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Home</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+<!-- CSS -->
+<!-- Bootstrap CSS
+============================================ -->
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<!-- Icon Font CSS
+============================================ -->
+<link rel="stylesheet" href="/static/css/material-design-iconic-font.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+<!-- Plugins CSS
+============================================ -->
+<link rel="stylesheet" href="/static/css/plugins.css">
+<!-- Style CSS
+============================================ -->
+<link rel="stylesheet" href="/static/css/style.css">
+<!-- Modernizer JS
+============================================ -->
+<script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+<!-- 引入 echarts.js -->
+<script src="/static/js/echarts.min.js"></script>
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script src="/static/js/infographic.js"/></script>
+
+<style>
+        #search {
+            padding: 50px 80px;
+        }
+        
+        #search #searchForm {
+            top: 100px;
+            position: relative;
+        }
+        
+        #search #searchForm #message {
+            position: absolute;
+            top: 6px;
+            left: 270px;
+            color: #F95555;
+            display: none;
+        }
+        
+        #search #searchForm .input-group {
+            width: 250px;
+        }
+        
+        #search #searchForm #submit {
+            cursor: pointer;
+            transition: color .3s;
+            -o-transition: color .3s;
+            -ms-transition: color .3s;
+            -moz-transition: color .3s;
+            -webkit-transition: color .3s;
+            transition: background-color .3s;
+            -o-transition: background-color .3s;
+            -ms-transition: background-color .3s;
+            -moz-transition: background-color .3s;
+            -webkit-transition: background-color .3s;
+        }
+        
+        #search #searchForm #submit:hover {
+            background-color: #1C78B4;
+            color: white;
+        }
+        
+        #search #hot,
+        #search #searchResult {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        
+        #search .movie {
+            margin-top: 100px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        #search .movie .movie_cover {
+            width: 150px;
+            height: 200px;
+            border-radius: 5px;
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: box-shadow .3s;
+            -o-transition: box-shadow .3s;
+            -ms-transition: box-shadow .3s;
+            -moz-transition: box-shadow .3s;
+            -webkit-transition: box-shadow .3s;
+        }
+        
+        #search .movie .movie_cover:hover {
+            box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.4);
+        }
+        
+        #search .movie .movie_info {
+            margin-left: 170px;
+        }
+        
+        #search .movie .movie_info a {
+            text-decoration: none;
+            color: #6FA4CA;
+            transition: color .3s;
+            -o-transition: color .3s;
+            -ms-transition: color .3s;
+            -moz-transition: color .3s;
+            -webkit-transition: color .3s;
+        }
+        
+        #search .movie .movie_info a:hover {
+            color: #24597F;
+        }
+        
+        #search .movie .movie_info p {
+            color: #555;
+            margin-bottom: 0;
+            font-size: 12px;
+        }
+        </style>
+</head>
+
+<body>
+    <!-- Body main wrapper start -->
+<div class="wrapper fix">
+
+        <!-- Header Area Start -->
+        <div id="header-area" class="header-area section">
+        
+        <!-- Header Bottom Start -->
+        <div class="header-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                       
+                        <div class="navbar-header">
+                            <button class="menu-toggle navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu">
+                                <i class="zmdi open zmdi-menu"></i>
+                                <i class="zmdi close zmdi-close"></i>
+                            </button>
+                        </div>
+                        
+                        <!---- Menu ---->
+                        <div id="main-menu" class="main-menu onepage-nav collapse navbar-collapse float-right">
+                            <nav>
+                                <ul>
+                                    <li><a href="/index">home</a></li>
+                                    <li><a href="/index#pie_chart">piechart</a></li>
+                                    <li><a href="/index#district_map">map</a></li>
+                                    <li><a href="/index#line_chart">linechart</a></li>
+                                    <li><a href="/rate">analysis</a></li>
+                                    <li><a href="/search">search</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header Bottom End -->
+    </div>
+    <!-- Header Area End -->
+
+    <div id="search">
+            <div class="form-group" id="searchForm">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="输入电影标题">
+                    <div class="input-group-addon" id="submit"><i class="fa fa-fw fa-paper-plane-o"></i></div>
+                </div>
+                <p id="message">关键词都不给个怎么搜索……</p>
+            </div>
+            <div id="hot">
+                {% for item in movies %}
+                <div class="movie">
+                    <a href="{{item.cover}}" target="_blank">
+                        <div class="movie_cover" style="background-image:url({{item.cover}})"></div>
+                    </a>
+                    <div class="movie_info">
+                        <h4>
+                            <a href="{{item.imdblink}}" target="_blank">{{item.name}}</a>
+                            <span style="color:#44A031;font-size:14px;margin-left:5px;">
+                                {{item.releasetime_time}}
+                            </span>
+                            <span style="color:#FB5151;font-size:14px;margin-left:5px;">{{item.score}}分</span>
+                        </h4>
+                        <p>导演:&nbsp;&nbsp;{{item.director}}</p>
+                        <p>编剧:&nbsp;&nbsp;{{item.scriptwriter}}</p>
+                        <p>主演:&nbsp;&nbsp;{{item.mainactors}}</p>
+                        <p>类型:&nbsp;&nbsp;{{item.tag}}</p>
+                        <p>产地:&nbsp;&nbsp;{{item.countries}}</p>
+                        <p>语言:&nbsp;&nbsp;{{item.languages}}</p>
+                        <p>片长:&nbsp;&nbsp;{{item.length}}分钟</p>
+                        <p>又名:&nbsp;&nbsp;{{item.othername}}</p>
+                        <p>影评:&nbsp;&nbsp;{{item.commentnum}}条</p>
+                        <p>短评:&nbsp;&nbsp;{{item.shortcomnum}}条</p>
+                        <h5 style="color:#555;">剧情简介</h5>
+                        <p style="text-indent:2em;color:#777;">
+                            {{item.summary}}
+                            <br> 
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="searchResult" style="display:none;"></div>
+        </div>
+        <script>
+                $(document).ready(function() {
+                    $('#search #submit').click(function() {
+                        var keyword = $('#search input[name="keyword"]').val();
+                        if (keyword == '') {
+                            $('#search #message').fadeIn();
+                            $('#search #hot').show();
+                            $('#search #searchResult').hide()
+                        } else {
+                            $('#search #message').fadeOut();
+                            $('#search #hot').hide();
+                            $.ajax({
+                                url: '{{url_for("keyword")}}',
+                                type: 'POST',
+                                data: {
+                                    keyword: keyword
+                                },
+                                dataType: 'json',
+                                error: function() {},
+                                success: function(data) {
+                                    $('#search #searchResult').empty();
+                                    var  movies = data['data'];
+                                    var temp = '<p style="margin-bottom:20px;">共<span style="color:#2A9662;margin-left:5px;margin-right:5px;">' + movies.length + '</span>条标题含<span style="color:#FF4949;margin-left:5px;margin-right:5px;">' + keyword + '</span>的电影</p>';
+                                    $('#search #searchResult').append(temp)
+                                    for (var i = 0; i < movies.length; i++) {
+                                        var item = '<div class="movie"><a href="' + movies[i]["cover"] + '" target="_blank"><div class="movie_cover" style="background-image:url(' + movies[i]["cover"] + ')"></div></a><div class="movie_info"><h4><a href="' + movies[i]["imdblink"] + '" target="_blank">' + movies[i]["name"] + '</a><span style="color:#44A031;font-size:14px;margin-left:5px;">';
+                                        item = item + movies[i]["release_time"];
+                                        item = item + '</span><span style="color:#FB5151;font-size:14px;margin-left:5px;">' + movies[i]["score"] + '分</span></h4><p>导演:&nbsp;&nbsp;' + movies[i]["director"] + '</p><p>编剧:&nbsp;&nbsp;' + movies[i]["scriptwriter"] + '</p><p>主演:&nbsp;&nbsp;' + movies[i]["mainactors"] + '</p><p>类型:&nbsp;&nbsp;' + movies[i]["tag"] + '</p><p>产地:&nbsp;&nbsp;' + movies[i]["countries"] + '</p><p>语言:&nbsp;&nbsp;' + movies[i]["languages"] + '</p><p>片长:&nbsp;&nbsp;' + movies[i]["length"] + '分钟</p><p>又名:&nbsp;&nbsp;' + movies[i]["othername"] + '</p><p>影评:&nbsp;&nbsp;' + movies[i]["commentnum"] + '条</p><p>短评:&nbsp;&nbsp;' + movies[i]["shortcomnum"] + '条</p><h5 style="color:#555;">剧情简介</h5><p style="text-indent:2em;color:#777;">';
+                                        item = item + movies[i]['summary'] + '<br/>';
+                                        item = item + '</p></div></div>';
+                                        $('#search #searchResult').append(item);
+                                    }
+                                    $('#search #searchResult').show();
+                                }
+                            });
+                        }
+                    });
+                });
+                </script>
+</div>
+</body>

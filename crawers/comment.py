@@ -18,7 +18,6 @@ from crawers import MyOpener
 from storage.model import CommentCrawed, Comment
 
 
-
 def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
     errornum = 0
     comment_crawed = CommentCrawed(movie_id, movie_name)

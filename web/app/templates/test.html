@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+
+    
+
+// // 基于准备好的dom，初始化echarts实例
+var myChart = echarts.init(document.getElementById('main'));
+
+
+// 指定图表的配置项和数据
+var option = {
+    backgroundColor: '#2B80B9',
+    title: {
+        text: '电影类型统计',
+        x: 'center',
+        textStyle: {
+            color: '#FFFFFF'
+        }
+    },
+    tooltip:{
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c}部 ({d}%)"
+        },
+    series: [{
+        name: '电影类型',
+        type: 'pie',
+        // roseType: 'angle',
+        radius: '55%',
+        center: ['50%', '55%'],
+        data: []
+    }]
+};
+
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+
+
+$.get("http://localhost:5000/movie/tag").done(function(data){
+    console.log(data);
+        var temp_data = data.data;
+         myChart.setOption(
+             {
+                 series: [{
+                     data: temp_data
+                 }]
+             }
+         )
+    });
+
+    </script>
+
+</body>
+</html>

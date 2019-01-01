@@ -125,12 +125,5 @@ def main():
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
-    # new_key  = "摩天营救:"+"26804147"
-    # if new_key  in all_movie_name:
-    #     print(" in")
-    # else:
-    #     print("not in")
-
-
 if __name__ == "__main__":
     main()

@@ -10,12 +10,15 @@
 '''
 
 
+import time
+import traceback
+
 from bs4 import BeautifulSoup
+
 from crawers import MyOpener
 from storage.db_util import db_operate
-import time
 from storage.model import ShortComment, ShortCommentCrawed
-import traceback
+
 
 def craw_shortcomment(movie_id, movie_name, shortcomnum, db_queue):
     shortcomment_craw = ShortComment_Crawer(movie_name, movie_id, shortcomnum, db_queue)

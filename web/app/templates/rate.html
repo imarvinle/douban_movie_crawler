@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <!-- CSS -->
+    <!-- Bootstrap CSS
+============================================ -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Icon Font CSS
+============================================ -->
+    <link rel="stylesheet" href="/static/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- Plugins CSS
+============================================ -->
+    <link rel="stylesheet" href="/static/css/plugins.css">
+    <!-- Style CSS
+============================================ -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Modernizer JS
+============================================ -->
+    <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <!-- 引入 echarts.js -->
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/infographic.js" /></script>
+    <script src='/static/js/macarons.js' /></script>
+
+    <style>
+        #rate {
+            padding: 30px 50px;
+            text-align: center;
+        }
+
+        #rate #basic {
+            top: 100px;
+            bottom: 50px;
+            width: 90%;
+            margin-left: 5%;
+            margin-right: 5%;
+            height: 400px;
+        }
+
+        #rate #dynamic {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #rate #dynamic #control {
+            width: 90%;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #rate #dynamic #plots {
+            width: 100%;
+        }
+
+        #rate #categories {
+            margin-bottom: 10px;
+            margin-top: 80px
+        }
+
+        #rate #districts span,
+        #rate #categories span {
+            display: inline-block;
+            font-size: 12px;
+            color: #fff;
+            background-color: #ccc;
+            padding: 3px 6px;
+            margin-bottom: 3px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: color .3s;
+            -o-transition: color .3s;
+            -ms-transition: color .3s;
+            -moz-transition: color .3s;
+            -webkit-transition: color .3s;
+            transition: background-color .3s;
+            -o-transition: background-color .3s;
+            -ms-transition: background-color .3s;
+            -moz-transition: background-color .3s;
+            -webkit-transition: background-color .3s;
+        }
+
+        #rate #districts span.active,
+        #rate #categories span.active {
+            color: #fff;
+            background-color: #1C78B4;
+        }
+
+        #rate #showtime {
+            top: 50px;
+            width: 44%;
+            height: 300px;
+            display: inline-block;
+            margin-left: 2%;
+            margin-right: 2%;
+        }
+
+        #rate #length {
+            top: 50px;
+            width: 44%;
+            height: 300px;
+            display: inline-block;
+            margin-left: 2%;
+            margin-right: 2%;
+        }
+
+        #rate #average {
+            width: 94%;
+            margin-left: 3%;
+            margin-right: 3%;
+            height: 300px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <!-- Body main wrapper start -->
+    <div class="wrapper fix">
+
+        <!-- Header Area Start -->
+        <div id="header-area" class="header-area section">
+
+            <!-- Header Bottom Start -->
+            <div class="header-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="navbar-header">
+                                <button class="menu-toggle navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu">
+                                    <i class="zmdi open zmdi-menu"></i>
+                                    <i class="zmdi close zmdi-close"></i>
+                                </button>
+                            </div>
+
+                            <!---- Menu ---->
+                            <div id="main-menu" class="main-menu onepage-nav collapse navbar-collapse float-right">
+                                <nav>
+                                    <ul>
+                                        <li><a href="/index">home</a></li>
+                                        <li><a href="/index#pie_chart">piechart</a></li>
+                                        <li><a href="/index#district_map">map</a></li>
+                                        <li><a href="/index#line_chart">linechart</a></li>
+                                        <li><a href="/rate">analysis</a></li>
+                                        <li><a href="/search">search</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Header Bottom End -->
+        </div>
+        <!-- Header Area End -->
+
+        <div id="rate">
+            <div id="basic"></div>
+            <div id="dynamic">
+                <div id="control">
+                    <div id="districts">
+                    </div>
+                </div>
+                <div id="plots">
+                    <div id="showtime"></div>
+                    <div id="length"></div>
+                </div>
+                <div style="position:relative;">
+                    <div id="average"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var showTimeData = [];
+            var lengthData = [];
+
+            var rateStat = echarts.init(document.getElementById('basic'), 'infographic');
+            option = {
+                title: {
+                    text: '电影评分统计',
+                    x: 'center',
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return params.seriesName + '<br>' + params.value[0] + '分：' + params.value[1] + '部';
+                    }
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'value',
+                    min: 2,
+                    max: 10
+                }],
+                yAxis: [{
+                    type: 'value',
+                    min: 0,
+                    max: 200
+                }],
+                series: [{
+                    name: '电影评分统计',
+                    type: 'line',
+                    smooth: 'true',
+                    data: []
+                }]
+            };
+            rateStat.setOption(option);
+
+            rateStat.showLoading();
+            $.get("http://localhost:5000/movie/rateline").done(function (data) {
+                // console.log(data);
+                rateStat.hideLoading();
+                var temp_data = data.data;
+                rateStat.setOption({
+                    series: [{
+                        data: temp_data
+                    }]
+                })
+            });
+            // 电影评分和上映年份的关系
+            var showtimeOption = {
+                title: {
+                    text: '上映时间－评分关系',
+                    x: "center"
+                },
+                tooltip: {
+                    trigger: 'item',
+                    showDelay: 0,
+                    formatter: function (params) {
+                        return params.seriesName + '<br/>' + params.value[0] + '年 ' + params.value[1] + '分';
+                    },
+                },
+                xAxis: [{
+                    type: 'value',
+                    min: 1920,
+                    max: 2025
+                }],
+                yAxis: [{
+                    type: 'value',
+                    min: 0,
+                    max: 10
+                }],
+                series: [{
+                    name: '上映时间－评分',
+                    type: 'scatter',
+                    data: showTimeData
+                }]
+            };
+
+            var showtime = echarts.init(document.getElementById('showtime'), 'macarons');
+            showtime.setOption(showtimeOption);
+
+            showtime.showLoading();
+            $.get("http://localhost:5000/movie/year_relation").done(function (data) {
+                // console.log(data);
+                showtime.hideLoading();
+                var temp_data = data.data;
+                showtime.setOption({
+                    series: [{
+                        data: temp_data
+                    }]
+                })
+            });
+
+            var lengthOption = {
+                title: {
+                    text: '片长－评分关系',
+                    x: "center"
+                },
+                tooltip: {
+                    trigger: 'item',
+                    showDelay: 0,
+                    formatter: function (params) {
+                        return params.seriesName + '<br/>' + params.value[0] + '分钟 ' + params.value[1] + '分';
+                    },
+                },
+                xAxis: [{
+                    type: 'value',
+                    min: 20,
+                    max: 300
+                }],
+                yAxis: [{
+                    type: 'value',
+                    min: 0,
+                    max: 10
+                }],
+                series: [{
+                    name: '片长－评分',
+                    type: 'scatter',
+                    data: []
+                }]
+            };
+
+            var length = echarts.init(document.getElementById('length'), 'macarons');
+            length.setOption(lengthOption);
+
+            length.showLoading();
+            $.get("http://localhost:5000/movie/length_relation").done(function (data) {
+                // console.log(data);
+                length.hideLoading();
+                var temp_data = data.data;
+                length.setOption({
+                    series: [{
+                        data: temp_data
+                    }]
+                })
+            });
+
+            $('#rate #categories span').click(function () {
+                $('#rate #categories span').removeClass('active');
+                $(this).addClass('active');
+                $('#rate #districts span').removeClass('active');
+                $('#rate #districts span[name="all"]').addClass('active');
+
+                var category = $(this).text();
+                if (category == '全部') {
+                    showtimeOption.series[0].data = showTimeData;
+                    lengthOption.series[0].data = lengthData;
+
+                    var showtime_all = echarts.init(document.getElementById('showtime'), 'infographic');
+                    showtime_all.setOption(showtimeOption);
+                    var length_all = echarts.init(document.getElementById('length'), 'infographic');
+                    length_all.setOption(lengthOption);
+                } else {
+                    var temp_1 = [];
+                    var temp_2 = [];
+                    temp_1.push(showTimeData[0]);
+                    temp_1.push(showTimeData[2]);
+                    temp_1.push(showTimeData[4]);
+                    temp_2.push(lengthData[0]);
+                    temp_2.push(lengthData[2]);
+                    temp_2.push(lengthData[4]);
+                    showtimeOption.series[0].data = temp_1;
+                    lengthOption.series[0].data = temp_2;
+
+                    var showtime_select = echarts.init(document.getElementById('showtime'), 'infographic');
+                    showtime_select.setOption(showtimeOption);
+                    var length_select = echarts.init(document.getElementById('length'), 'infographic');
+                    length_select.setOption(lengthOption);
+                }
+            });
+        </script>
+
+    </div>
+    <!-- Body main wrapper end -->
+    <!-- JS -->
+
+    <!-- jQuery JS
+============================================ -->
+    <script src="/static/js/vendor/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap JS
+============================================ -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Plugins JS
+============================================ -->
+    <script src="/static/js/plugins.js"></script>
+    <!-- Ajax Mail JS
+============================================ -->
+    <script src="/static/js/ajax-mail.js"></script>
+    <!-- Main JS
+============================================ -->
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>>

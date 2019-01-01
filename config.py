@@ -25,5 +25,5 @@ TagThreadSize = 1
 MovieThreadSize = 2
 ShortCommentSize = 0
 CommentSize = 0
-DataBaseInsertSize = 1
+DataBaseInsertSize = 4
 

@@ -120,6 +120,7 @@ class Country(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(50), index=True)
     en_name = Column(String(60))
+
     def __init__(self, name, en_name):
         self.name = name
         self.en_name = en_name

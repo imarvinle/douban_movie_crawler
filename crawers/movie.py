@@ -11,21 +11,19 @@
 
 
 import json
+import random
 import threading
 import time
+from functools import reduce
 from urllib import parse
 
 from bs4 import BeautifulSoup
-from functools import reduce
 
 from crawers import MyOpener
-from storage.db_util import db_operate
-from main import all_movie_id, all_movie_name
-from crawers.shortcomment import craw_shortcomment
 from crawers.comment import craw_comment_list
-
-import random
-import traceback
+from crawers.shortcomment import craw_shortcomment
+from storage.db_util import db_operate
+from main import all_movie_name
 
 lock = threading.Lock()
 
@@ -75,9 +73,6 @@ def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
         time.sleep(6)
 
     print("<%s> 类电影共有 %d 部\n" % (tag, start+20))
-
-
-
 
 class Moview_Crawer():
 
@@ -195,7 +190,7 @@ class Moview_Crawer():
             if len(self.evaluation_nums) > 0:
                 self.evaluation_nums = int(self.evaluation_nums[0].get_text().split()[0])
             else:
-                self.shortcomnum = 0
+                self.evaluation_nums = 0
 
             ## 短评人数
             shortcomnum = soup.select("div#comments-section > div.mod-hd")[0].select("span.pl")
@@ -221,12 +216,9 @@ class Moview_Crawer():
 
             self.db_queue.put((db_operate, [], {"value": self, "type": "movie"}))
             print("[Movie-OK] 电影 <%s> 爬取成功\n" % self.title)
-            # print(self.othername)
-            # print(self.summary)
-            # print(self.screenwriter)
-            # print(self.director)
-            # self.short_queue.put((craw_shortcomment, [self.title, self.movie_id, self.shortcomnum, self.db_queue], {}))
-            # self.comment_queue.put((craw_comment_list, [self.movie_id, self.title, self.commentnum, self.db_queue], {}))
+
+            self.short_queue.put((craw_shortcomment, [self.title, self.movie_id, self.shortcomnum, self.db_queue], {}))
+            self.comment_queue.put((craw_comment_list, [self.movie_id, self.title, self.commentnum, self.db_queue], {}))
         except Exception as e:
             # info = traceback.format_exc()
             # print(info)
