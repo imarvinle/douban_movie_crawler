@@ -84,9 +84,10 @@ class DB_Helper():
             print("[DB-OK] 电影 <%s> 已插入数据库\n" % (movie.title))
         except Exception as e:
             self.session.rollback()
-            self.session.close()
             print("电影插入出错[%s]" % (str(new_movie)))
             print("DB Error  <%s>" % str(e))
+        finally:
+            self.session.close()
 
 
     def insert_short(self, short_list):
@@ -100,6 +101,8 @@ class DB_Helper():
             self.session.close()
             print("短评插入出错[%d 条短评]" % (len(short_list)))
             print("DB Error  <%s>" % str(e))
+        finally:
+            self.session.close()
 
     def insert_comment(self, comment_list):
         try:
@@ -112,6 +115,8 @@ class DB_Helper():
             self.session.close()
             print("影评插入数据出错[%d条影评]" % len(comment_list))
             print("DB Error  <%s>" % str(e))
+        finally:
+            self.session.close()
 
     def insert_shortcrawed(self, shortcrawed):
         try:
@@ -123,6 +128,8 @@ class DB_Helper():
             self.session.close()
             print("短评标记插入出错[%s]" % (str(shortcrawed)))
             print("DB Error  <%s>" % str(e))
+        finally:
+            self.session.close()
 
     def insert_commentcrawed(self, commentcrawed):
         try:
@@ -134,7 +141,8 @@ class DB_Helper():
             self.session.close()
             print("影评标记插入出错 [%s]" % (str(commentcrawed)))
             print("DB Error  <%s>" % str(e))
-
+        finally:
+            self.session.close()
 
 
 
