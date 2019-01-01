@@ -50,13 +50,17 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
             review_list = review_list.select("> div")
             for review_item in review_list:
                 try:
+                    avatar = review_item.select("img")
+                    if len(avatar) > 0:
+                        avatar = avatar[0]["src"].strip()
+                    else:
+                        avatar = "https://img1.doubanio.com/icon/u64304532-9.jpg"
                     nickname = review_item.select("a.name")[0].get_text().split()[0]
                     _time = review_item.select("span.main-meta")[0].get_text().split()[0]
                     contents = review_item.select("div.short-content")[0].get_text().split()
                     content = ""
                     for item in contents:
                         content = content + " " + item.strip()
-
                     actions = review_item.select("div.action > a")
                     usednum = 0
                     unusednum = 0
@@ -70,7 +74,7 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
                     responsestr = actions[2].get_text().split()[0]
                     responsenum = int(re.compile(r'[0-9]\d*').findall(responsestr)[0])
 
-                    comment = Comment(movie_name, nickname, _time, content, usednum, unusednum, responsenum)
+                    comment = Comment(avatar, movie_name, nickname, _time, content, usednum, unusednum, responsenum)
 
                     comment_list.append(comment)
                 except Exception as e:

@@ -140,17 +140,20 @@ class ShortComment(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     movie_name = Column(String(60), index=True) #ForeignKey('movie.name', ondelete='CASCADE'))
+    avatar = Column(String(150))
+
     nickname = Column(String(60), nullable=True)
     time = Column(String(60), nullable=True)
     content = Column(Text, nullable=True)
     likenum = Column(Integer, default=0)
 
-    def __init__(self, movie_name, nickname, _time, content, likenum):
+    def __init__(self, avatar, movie_name, nickname, _time, content, likenum):
         self.movie_name = movie_name
         self.nickname = nickname
         self.time = _time
         self.content = content
         self.likenum = likenum
+        self.avatar = avatar
 
     def __repr__(self):
         return '<ShortCom 电影:%s 评论者:%s 评论时间:%s>' % (self.movie_name, self.nickname, self.time)
@@ -163,6 +166,7 @@ class Comment(Base):
 
     #  主键
     id = Column(Integer, primary_key=True, autoincrement=True)
+    avatar = Column(String(150))
     movie_name = Column(String(60), index=True)
     nickname = Column(String(60), nullable=True)
     time = Column(String(60), nullable=True)
@@ -172,7 +176,7 @@ class Comment(Base):
     responsenum = Column(Integer, default=0)
 
 
-    def __init__(self, movie_name, nickname, _time, content, usednum, unusednum, responsenum):
+    def __init__(self, avatar, movie_name, nickname, _time, content, usednum, unusednum, responsenum):
         self.movie_name = movie_name
         self.nickname = nickname
         self.time = _time
@@ -180,6 +184,7 @@ class Comment(Base):
         self.usednum = usednum
         self.unusednum = unusednum
         self.responsenum = responsenum
+        self.avatar = avatar
 
     def __repr__(self):
         return '<Comment 电影:%s  评论者:%s  评论时间:%s>' % (self.movie_name, self.nickname, self.time)

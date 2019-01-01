@@ -44,6 +44,7 @@ class ShortComment_Crawer():
         self.nickname = ""
         self.likenum = 0
         self.time = ""
+        self.avatar = "https://img3.doubanio.com/icon/u80485721-1.jpg"
 
     def saveFile(self, list):
         with open("duanping.txt", "a") as file:
@@ -72,11 +73,14 @@ class ShortComment_Crawer():
                 comment_items = soup.select("div.comment-item")
                 for item in comment_items:
                     try:
+                        avatar = item.select("img")
+                        if len(avatar) > 0:
+                            self.avatar = avatar[0]["src"].strip()
                         self.content = item.select("div.comment > p")[0].get_text().split()[0]
                         self.nickname = item.select("div.avatar > a")[0]["title"].split()[0]
                         self.likenum = int(item.select("span.votes")[0].get_text().split()[0])
                         self.time = item.select("span.comment-time ")[0].get_text().split()[0]
-                        comment_list.append(ShortComment(self.movie_name, self.nickname, self.time, self.content, self.likenum))
+                        comment_list.append(ShortComment(self.avatar, self.movie_name, self.nickname, self.time, self.content, self.likenum))
                         #comment_list.append("%s %s %d %s" % (self.content, self.nickname, self.likenum, self.time))
                     except Exception as e:
                         print("解析电影<%s> 第 %d 页短评出错\n" % (self.movie_name, page + 1))

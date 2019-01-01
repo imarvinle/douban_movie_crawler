@@ -14,14 +14,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from storage.model import Base
-from config import DATABASE_URI
+from config import DATABASE_URI, DataBaseInsertSize
 
 engine = create_engine(DATABASE_URI)
 
 Base.metadata.create_all(engine)
 
-
-session_factory = sessionmaker(bind=engine)
-Session = scoped_session(session_factory)
+session_list = []
+for i in range(DataBaseInsertSize):
+    session_factory = sessionmaker(bind=engine)
+    Session = scoped_session(session_factory)
+    session_list.append(Session)
 
 

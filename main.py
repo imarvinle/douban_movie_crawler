@@ -117,7 +117,7 @@ def main():
     for tag in tags:
         tags_list.append(tag)
 
-    for tag in tags_list[::-1]:
+    for tag in tags_list:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
 
     pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue, commentqueue, db_queue, TagThreadSize,
