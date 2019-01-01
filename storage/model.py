@@ -19,60 +19,55 @@ Base = declarative_base()
 
 tags = Table('tags',Base.metadata,
     Column('tag_id', Integer, ForeignKey('tag.id', ondelete='CASCADE')),
-    Column('movie_name', String(60), ForeignKey('movie.name', ondelete='CASCADE'))
+    Column('movie_id', Integer, ForeignKey('movie.id', ondelete='CASCADE'))
 )
-
-en_countrys = Table('en_countrys',Base.metadata,
-    Column('en_country_id', Integer, ForeignKey('en_country.id', ondelete='CASCADE')),
-    Column('movie_name', String(60), ForeignKey('movie.name', ondelete='CASCADE'))
-)
-
 
 countrys = Table('countrys',Base.metadata,
     Column('country_id', Integer, ForeignKey('country.id', ondelete='CASCADE')),
-    Column('movie_name', String(60), ForeignKey('movie.name', ondelete='CASCADE'))
+    Column('movie_id', Integer, ForeignKey('movie.id', ondelete='CASCADE'))
 )
 
 languages = Table('languages',Base.metadata,
     Column('language_id', Integer, ForeignKey('language.id', ondelete='CASCADE')),
-    Column('movie_name', String(60), ForeignKey('movie.name', ondelete='CASCADE'))
+    Column('movie_id', Integer, ForeignKey('movie.id', ondelete='CASCADE'))
 )
 
 class Movie(Base):
     __tablename__ = "movie"
-
-    name = Column(String(60), primary_key=True)
-    id = Column(Integer, nullable=True)
-    cover = Column(String(200), nullable=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=True, index=True)
+    movie_id = Column(Integer, nullable=True)
+    cover = Column(String(300), nullable=True)
     summary = Column(Text, nullable=True)
-    director = Column(String(50), nullable=True)
-    screenwriter = Column(String(100), nullable=True)
+    director = Column(String(100), nullable=True)
+    screenwriter = Column(Text, nullable=True)
     mainactors = Column(Text, nullable=True)
-    release_time = Column(String(100), nullable=True)
+    release_time = Column(String(200), nullable=True)
     length = Column(Integer, default=0)
     imdb_url = Column(String(200),nullable=True)
-    othername = Column(String(260), nullable=True)
-    score = Column(Float, default=5.0)
+    othername = Column(Text, nullable=True)
+    score = Column(Float, default=5.0, index=True)
     evaluation_nums = Column(Integer, default=0)
     shortcomnum = Column(Integer, default=0)
     year = Column(Integer, default=2018)
     commentnum = Column(Integer, default=0)
+    tag_list = relationship("Tag", secondary=tags, backref=backref("movie", lazy="joined"), lazy="dynamic")
+    country_list = relationship("Country", secondary=countrys, backref=backref("movie", lazy="joined"), lazy="dynamic")
+    language_list = relationship("Language", secondary=languages, backref=backref("movie", lazy="joined"), lazy="dynamic")
 
-    tags = relationship("Tag", secondary=tags, backref=backref("movie", lazy="joined"), lazy="dynamic")
-    countries = relationship("Country", secondary=countrys, backref=backref("movie", lazy="joined"), lazy="dynamic")
-    en_countries = relationship("ENCountry", secondary=en_countrys, backref=backref("movie", lazy="joined"), lazy="dynamic")
-
-    languages = relationship("Language", secondary=languages, backref=backref("movie", lazy="joined"), lazy="dynamic")
+    tags = Column(Text, nullable=True)
+    countrys = Column(Text, nullable=True)
+    languages = Column(Text, nullable=True)
 
     def __init__(self, name, movie_id, cover, summary, director, screenwriter , release_time, length, imdb_url,
-                 othername, score, mainactors, evaluation_nums, shortcomnum, commentnum, year, languages = None, tags=None, country=None, encountry=None):
+                 othername, score, mainactors, evaluation_nums, shortcomnum, commentnum, year, languages, countrys, tags,
+                 language_list = None, tag_list=None, country_list=None):
         self.name = name
-        self.id = movie_id
+        self.movie_id = movie_id
         self.cover = cover
         self.summary = summary
         self.director = director
         self.screenwriter = screenwriter
-        self.languages = languages
         self.release_time = release_time
         self.length = length
         self.imdb_url = imdb_url
@@ -80,21 +75,26 @@ class Movie(Base):
         self.score = score
         self.evaluation_nums = evaluation_nums
         self.mainactors  = mainactors
-        self.tags = tags
         self.shortcomnum = shortcomnum
         self.commentnum = commentnum
         self.year = year
-        self.countries = country
-        self.en_countries = encountry
+
+        self.tags = tags
+        self.languages = languages
+        self.countrys = countrys
+        self.tag_list = tag_list
+        self.country_list = country_list
+        self.language_list  = language_list
+
 
     def __repr__(self):
-        return '<Movie %s  id=%d  短评: %d 影评: %d>' % (self.name, self.id, self.shortcomnum, self.commentnum)
+        return '<Movie %s  movie_id=%d  短评: %d 影评: %d>' % (self.name, self.movie_id, self.shortcomnum, self.commentnum)
 
 
 class Tag(Base):
     __tablename__ = 'tag'
     id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50))
+    name = Column(String(50), index=True)
 
     def __init__(self, name):
         self.name = name
@@ -106,7 +106,7 @@ class Language(Base):
     __tablename__ = 'language'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50))
+    name = Column(String(50), index=True)
 
     def __init__(self, name):
         self.name = name
@@ -118,24 +118,14 @@ class Language(Base):
 class Country(Base):
     __tablename__ = "country"
     id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50))
-
-    def __init__(self, name):
+    name = Column(String(50), index=True)
+    en_name = Column(String(60))
+    def __init__(self, name, en_name):
         self.name = name
+        self.en_name = en_name
 
     def __repr__(self):
-        return '<Country %s>' % self.name
-
-class ENCountry(Base):
-    __tablename__ = "en_country"
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50))
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<ENCountry %s>' % self.name
+        return '<Country name=%s  en_name=%s>' % (self.name, self.en_name)
 
 
 class ShortComment(Base):
@@ -143,7 +133,7 @@ class ShortComment(Base):
 
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    movie_name = Column(String(60), ForeignKey('movie.name', ondelete='CASCADE'))
+    movie_name = Column(String(60), index=True) #ForeignKey('movie.name', ondelete='CASCADE'))
     nickname = Column(String(60), nullable=True)
     time = Column(String(60), nullable=True)
     content = Column(Text, nullable=True)
@@ -167,7 +157,7 @@ class Comment(Base):
 
     #  主键
     id = Column(Integer, primary_key=True, autoincrement=True)
-    movie_name = Column(String(60), ForeignKey('movie.name', ondelete='CASCADE'))
+    movie_name = Column(String(60), index=True)
     nickname = Column(String(60), nullable=True)
     time = Column(String(60), nullable=True)
     content = Column(Text, nullable=True)

@@ -71,8 +71,8 @@ class ProxyProvider():
 
 
     def delete_addr(self, ip):
-        # req = requests.get(("http://39.108.123.85:8000/delete?ip=%s" % ip)).content
-        # print(req)
+        req = requests.get(("http://39.108.123.85:8000/delete?ip=%s" % ip)).content
+        print(req)
         pass
 
 
@@ -87,8 +87,6 @@ class MyOpener():
             'http': 'http://' + self.proxyaddr,
             'https': 'https://' + self.proxyaddr,
         }
-
-
     def open(self, req):
         print("当前使用的代理: %s" % self.proxyaddr)
         retrynum = 0
@@ -96,7 +94,6 @@ class MyOpener():
         while True:
             try:
                 response = self.session.get(req,  timeout=5)        #proxies = self.proxy,
-
             except requests.exceptions.RequestException as e:
                 retrynum = retrynum + 1
                 print("出错啦 <%s>" % str(e))
@@ -104,7 +101,6 @@ class MyOpener():
                 if retrynum > 5:
                     response = None
                     break
-
         if response ==  None:
             return False
         else:
@@ -112,8 +108,6 @@ class MyOpener():
                 print("返回吗不是200")
                 self.update_proxy()
             return response
-
-
     def update_proxy(self):
         self.proxy_provider.delete_addr(self.proxyaddr.split(":")[0])
         print("更新代理中...%s" % self.proxyaddr.split(":")[0])
@@ -163,5 +157,3 @@ class MyOpener():
 
 from crawers.movie import Moview_Crawer
 
-craw = Moview_Crawer(2295783)
-craw.get_movie_detail()

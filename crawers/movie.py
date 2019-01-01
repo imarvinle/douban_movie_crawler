@@ -34,6 +34,7 @@ def craw_movie_detail(movie_id, cover, title, score, short_queue, comment_queue,
     movie_crawer.get_movie_detail()
 
 def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
+    global all_movie_name
     start = 0
     opener = MyOpener("[%s标签包含电影抓取]" % tag)
     scores = [4.5, 5.6, 7.8, 8.9, 9.6]
@@ -59,13 +60,15 @@ def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
             title = item['title'].strip()
             cover = item['cover']
             id = int(item["id"])
+            movie_key = title
             if lock.acquire():
                 try:
-                    if title not in all_movie_name:
-                        all_movie_name.add(title)
-                        movie_queue.put((craw_movie_detail, [id, cover, title, score, short_queue, comment_queue, db_queue], {}))
-                    else:
+                    if movie_key in all_movie_name:
                         print("发现重复电影[%s]\n" % title)
+                    else:
+                        all_movie_name.add(movie_key)
+                        movie_queue.put((craw_movie_detail, [id, cover, title, score, short_queue, comment_queue, db_queue], {}))
+                        #print("发现新电影[%s]\n" % title)
                 finally:
                     lock.release()
         start = start + 20

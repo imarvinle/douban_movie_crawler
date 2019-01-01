@@ -45,8 +45,8 @@ class MyThread(threading.Thread):
                 #print("%s 线程-%s完成一个任务，马上领取下一个任务\n" % (self.taskname, self.getName()))
             except Exception as e:
                 no_task = no_task + 1
-                if no_task <= 60:
-                    print("%s 线程-%s目前无任务可做, 正在第 %d 次等待\n" % (self.taskname, self.getName(), no_task))
+                if no_task <= 120:
+                    #print("%s 线程-%s目前无任务可做, 正在第 %d 次等待\n" % (self.taskname, self.getName(), no_task))
                     time.sleep(5)
                     continue
                 else:

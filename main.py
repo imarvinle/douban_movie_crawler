@@ -45,15 +45,15 @@ def query():
     global movie_map
 
     session = Session()
-    movies = session.query(Movie.id, Movie.name, Movie.commentnum, Movie.shortcomnum)
+    movies = session.query(Movie.movie_id, Movie.name, Movie.commentnum, Movie.shortcomnum)
     all_movie_id = set(map(lambda x: x[0], movies))
     for item in movies:
         movie_map[item[0]] = {"name": item[1], "comnum": item[2], "shortnum": item[3]}
 
-    all_movie_name = set(map(lambda x: x[1], movies))
+    all_movie_name = set(map(lambda x: x[1].strip(), movies))
 
     shorts = session.query(ShortCommentCrawed.movie_id)
-    short_id = set(map(lambda  x: x[0], shorts))
+    short_id = set(map(lambda x: x[0], shorts))
 
     comments = session.query(CommentCrawed.movie_id)
     comment_id = set(map(lambda x: x[0], comments))
@@ -113,7 +113,11 @@ def main():
     for id in short_id:
         movie = movie_map[id]
         shortqueue.put((craw_shortcomment, [id, movie['name'], movie['shortnum'], db_queue], {}))
+    tags_list = []
     for tag in tags:
+        tags_list.append(tag)
+
+    for tag in tags_list[::-1]:
         movie_tag_queue.put((craw_movie_id, [tag, movie_queue, shortqueue, commentqueue, db_queue], {}))
 
     pool = MyThreadPool(movie_tag_queue, movie_queue, shortqueue, commentqueue, db_queue, TagThreadSize,
@@ -121,6 +125,11 @@ def main():
     pool.joinAll()
     print("********** END **********")
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
+    # new_key  = "摩天营救:"+"26804147"
+    # if new_key  in all_movie_name:
+    #     print(" in")
+    # else:
+    #     print("not in")
 
 
 if __name__ == "__main__":

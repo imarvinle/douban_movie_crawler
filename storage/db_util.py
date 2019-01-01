@@ -10,8 +10,8 @@
 '''
 
 from storage import Session
-from storage.model import Movie, Tag, Country, Language, ENCountry
-from storage.map_config import nameMap
+from storage.map_config import nameMap, language_map
+from storage.model import Movie, Tag, Country, Language
 
 
 def db_operate(type = None, value = None):
@@ -37,45 +37,45 @@ class DB_Helper():
 
     def insert_movie(self, movie):
         tag_list = []
+        tags = ""
         for tag_str in movie.tags:
+            tags = tags + "/" + tag_str
             tag = self.session.query(Tag).filter_by(name=tag_str).first()
             if tag:
                 tag_list.append(tag)
             else:
                 tag_list.append(Tag(tag_str))
+        tags = tags.strip("/")
+
         country_list = []
+        countrys = ""
         for country_str in movie.countries:
+            countrys = countrys + "/" +country_str
+            en_country_str = nameMap.get(country_str, "unknown")
             country = self.session.query(Country).filter_by(name=country_str).first()
             if country:
                 country_list.append(country)
             else:
-                country_list.append(Country(country_str))
+                country_list.append(Country(country_str, en_country_str))
+        countrys = countrys.strip("/")
 
-        en_country_list = []
-        for en_country_str in movie.countries:
-            en_country_str = nameMap.get(en_country_str, en_country_str)
-            en_country = self.session.query(ENCountry).filter_by(name=en_country_str).first()
-            if en_country:
-                en_country_list.append(en_country)
-            else:
-                en_country_list.append(ENCountry(en_country_str))
 
         language_list = []
+        languages = ""
         for language_str in movie.languages:
             language_str = language_map.get(language_str, language_str)
+            languages = languages + "/" + language_str
             language = self.session.query(Language).filter_by(name=language_str).first()
             if language:
                 language_list.append(language)
             else:
                 language_list.append(Language(language_str))
+        languages = languages.strip("/")
         new_movie = None
-
-
-
         try:
             new_movie = Movie(movie.title, movie.movie_id, movie.cover, movie.summary, movie.director, movie.screenwriter, movie.release_time,
-                              movie.length, movie.imdb_url, movie.othername, movie.score, movie.mainactors,
-                              movie.evaluation_nums, movie.shortcomnum, movie.commentnum, movie.year,language_list, tag_list, country_list, en_country_list)
+                              movie.length, movie.imdb_url, movie.othername, movie.score, movie.mainactors,movie.evaluation_nums,
+                              movie.shortcomnum, movie.commentnum, movie.year, languages, countrys, tags,language_list, tag_list, country_list)
             self.session.add(new_movie)
             self.session.commit()
             print("[DB-OK] 电影 <%s> 已插入数据库\n" % (movie.title))
