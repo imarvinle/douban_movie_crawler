@@ -52,7 +52,11 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
                 try:
                     nickname = review_item.select("a.name")[0].get_text().split()[0]
                     _time = review_item.select("span.main-meta")[0].get_text().split()[0]
-                    content = review_item.select("div.short-content")[0].get_text().split()[0]
+                    contents = review_item.select("div.short-content")[0].get_text().split()
+                    content = ""
+                    for item in contents:
+                        content = content + " " + item.strip()
+
                     actions = review_item.select("div.action > a")
                     usednum = 0
                     unusednum = 0

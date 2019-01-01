@@ -26,4 +26,3 @@ MovieThreadSize = 0
 ShortCommentSize = 2
 CommentSize = 2
 DataBaseInsertSize = 4
-
