@@ -47,17 +47,11 @@ headers = {
         'Connection': 'keep-alive'
 }
 
-
-
-
-
-
 def get_session():
     request_session = requests.Session()
     headers["User-Agent"] = random.choice(user_agent)
     request_session.headers.update(headers)
     return request_session
-
 
 class MyOpener():
 
