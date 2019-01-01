@@ -16,14 +16,14 @@ USERNAME = 'root'
 PASSWORD = 'password'
 HOST = '39.108.123.85'
 PORT = '3306'
-DATABASE = 'douban'             # 数据库名
+DATABASE = 'doubanmovie'             # 数据库名
 DATABASE_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8mb4'.format(DIALECT,DRIVER,USERNAME,PASSWORD,HOST,PORT,DATABASE)
 
 
 # Configure the thread info
 TagThreadSize = 1
-MovieThreadSize = 2
+MovieThreadSize = 3
 ShortCommentSize = 0
 CommentSize = 0
-DataBaseInsertSize = 4
+DataBaseInsertSize = 1
 

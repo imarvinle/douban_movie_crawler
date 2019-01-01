@@ -15,7 +15,7 @@ def tag_num_list():
     threshold = 20
     data = []
     tags = Tag.query.all()
-    tags = list(map(lambda x : {"value": len(x.movie), "name": x.name}, tags))
+    tags = list(map(lambda x : {"value": x.num, "name": x.name}, tags))
     tags = sorted(tags, key=lambda x : x["value"], reverse=True)
     if len(tags) > threshold:
         data.extend(tags[0:threshold])
@@ -47,8 +47,7 @@ def language_static():
     data = []
     languages = Language.query.all()
     for language in languages:
-        movies = language.movie
-        data.append({'value': len(movies), 'name': language.name})
+        data.append({'value': language.num, 'name': language.name})
     data = sorted(data, key=lambda x: x['value'], reverse=True)[0:10]
     return jsonify({'data': data})
 
@@ -58,8 +57,7 @@ def country_static():
     data = []
     countrys = Country.query.all()
     for country in countrys:
-        movies = country.movie
-        data.append({'value': len(movies), 'name': country.en_name})
+        data.append({'value': country.num, 'name': country.en_name})
     return jsonify({'data': data})
 
 

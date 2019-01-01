@@ -4,6 +4,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import render_template
+import random
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -29,7 +30,7 @@ def rate():
 @app.route('/search')
 def search():
     movie_list = []
-    des = Movie.query.order_by(db.desc(Movie.score)).limit(10).all()
+    des = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(12).all()
     for item in des:
         movie = {}
 

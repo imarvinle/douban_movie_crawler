@@ -84,9 +84,10 @@ class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(50), index=True)
-
-    def __init__(self, name):
+    num = db.Column(db.Integer)
+    def __init__(self, name, num):
         self.name = name
+        self.num = num
 
     def __repr__(self):
         return '<Tag %s>' % self.name
@@ -97,10 +98,11 @@ class Country(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(50), index=True)
     en_name = db.Column(db.String(60))
-
-    def __init__(self, name, en_name):
+    num = db.Column(db.Integer)
+    def __init__(self, name, en_name, num):
         self.name = name
         self.en_name = en_name
+        self.num = num
     def __repr__(self):
         return '<Country name=%s  en_name=%s>' % (self.name, self.en_name)
 
@@ -110,9 +112,11 @@ class Language(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(50), index=True)
+    num = db.Column(db.Integer)
 
-    def __init__(self, name):
+    def __init__(self, name, num):
         self.name = name
+        self.num = num
 
     def __repr__(self):
         return '<Language %s>' % self.name

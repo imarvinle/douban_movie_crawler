@@ -95,9 +95,11 @@ class Tag(Base):
     __tablename__ = 'tag'
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(50), index=True)
+    num = Column(Integer)
 
-    def __init__(self, name):
+    def __init__(self, name, num):
         self.name = name
+        self.num = num
 
     def __repr__(self):
         return '<Tag %s>' % self.name
@@ -107,10 +109,11 @@ class Language(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(50), index=True)
+    num = Column(Integer)
 
-    def __init__(self, name):
+    def __init__(self, name, num):
         self.name = name
-
+        self.num = num
     def __repr__(self):
         return '<Language %s>' % self.name
 
@@ -120,10 +123,12 @@ class Country(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(50), index=True)
     en_name = Column(String(60))
+    num = Column(Integer)
 
-    def __init__(self, name, en_name):
+    def __init__(self, name, en_name, num):
         self.name = name
         self.en_name = en_name
+        self.num = num
 
     def __repr__(self):
         return '<Country name=%s  en_name=%s>' % (self.name, self.en_name)
