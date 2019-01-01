@@ -29,8 +29,10 @@
     <!-- 引入 echarts.js -->
     <script src="/static/js/echarts.min.js"></script>
     <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/infographic.js" /></script>
-    <script src='/static/js/macarons.js' /></script>
+    <script src="/static/js/infographic.js" />
+    </script>
+    <script src='/static/js/macarons.js' />
+    </script>
 
     <style>
         #rate {
@@ -116,6 +118,7 @@
         }
 
         #rate #average {
+            top: 50px;
             width: 94%;
             margin-left: 3%;
             margin-right: 3%;
@@ -319,38 +322,57 @@
                 })
             });
 
-            $('#rate #categories span').click(function () {
-                $('#rate #categories span').removeClass('active');
-                $(this).addClass('active');
-                $('#rate #districts span').removeClass('active');
-                $('#rate #districts span[name="all"]').addClass('active');
+            var heatOption = {
+                color: ['#3398DB'],
+                title: {
+                    text: '电影热度分析'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    data: []
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '短评数',
+                    data: [],
+                    type: 'bar'
+                }]
+            }
 
-                var category = $(this).text();
-                if (category == '全部') {
-                    showtimeOption.series[0].data = showTimeData;
-                    lengthOption.series[0].data = lengthData;
+            var heat = echarts.init(document.getElementById('average'), 'infographic');
+            heat.setOption(heatOption);
 
-                    var showtime_all = echarts.init(document.getElementById('showtime'), 'infographic');
-                    showtime_all.setOption(showtimeOption);
-                    var length_all = echarts.init(document.getElementById('length'), 'infographic');
-                    length_all.setOption(lengthOption);
-                } else {
-                    var temp_1 = [];
-                    var temp_2 = [];
-                    temp_1.push(showTimeData[0]);
-                    temp_1.push(showTimeData[2]);
-                    temp_1.push(showTimeData[4]);
-                    temp_2.push(lengthData[0]);
-                    temp_2.push(lengthData[2]);
-                    temp_2.push(lengthData[4]);
-                    showtimeOption.series[0].data = temp_1;
-                    lengthOption.series[0].data = temp_2;
-
-                    var showtime_select = echarts.init(document.getElementById('showtime'), 'infographic');
-                    showtime_select.setOption(showtimeOption);
-                    var length_select = echarts.init(document.getElementById('length'), 'infographic');
-                    length_select.setOption(lengthOption);
-                }
+            heat.showLoading;
+            $.get("http://localhost:5000/movie/heat").done(function (data) {
+                // console.log(data);
+                heat.hideLoading();
+                var movie_list = data.movies;
+                var com_list = data.comments;
+                heat.setOption({
+                    xAxis: {
+                        data: movie_list
+                    },
+                    series: [{
+                        data: com_list
+                    }]
+                })
             });
         </script>
 
