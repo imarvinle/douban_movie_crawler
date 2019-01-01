@@ -98,7 +98,7 @@ class MyOpener():
 #     login_url = 'https://accounts.douban.com/login?source=movie'
 #     form_data = {
 #         "form_email": "17738729175",
-#         "form_password": "lcldouban123",
+#         "form_password": "******",
 #         "source": "movie",
 #         "redir": "https://movie.douban.com/",
 #         "login": "登录"
