@@ -242,4 +242,5 @@ nameMap["意大利语"] = "Italy"
 nameMap["普通话"] = "China"
 nameMap["国语"] = "China"
 nameMap["山东话"] = "China"
+nameMap["法语"] = "France"
 

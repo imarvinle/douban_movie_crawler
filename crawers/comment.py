@@ -30,14 +30,14 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
         print("********** 正在爬取电影 <%s> 的第 %d 页的影评**********\n" % (movie_name, i+1))
         url = "https://movie.douban.com/subject/%d/reviews?sort=hotest&start=%d" % (movie_id, 20 * i)
 
-        if i > 10:
+        if i > 20:
             break
         res = opener.open(url)
 
         if not res["result"]:
             print("电影<%s> 第 %d 页影评爬取失败\n" % (movie_name, i+1))
             errornum = errornum + 1
-            if errornum > 3:
+            if errornum > 6:
                 print(" 停止爬取电影 <%s> 影评共爬取 %d 页\n" % (movie_name, i))
                 break
             else:
@@ -80,7 +80,7 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
             info = traceback.format_exc()
             print(info)
             errornum = errornum + 1
-            if errornum > 3:
+            if errornum > 6:
                 print(" 停止爬取电影 <%s> 影评共爬取 %d 页\n" % (movie_name, i))
                 break
             else:

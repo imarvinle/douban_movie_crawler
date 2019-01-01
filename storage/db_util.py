@@ -52,10 +52,10 @@ class DB_Helper():
         countrys = ""
         for country_str in movie.countries:
             countrys = countrys + "/" +country_str
-            en_country_str = nameMap.get(country_str, "unknown")
-            country = self.session.query(Country).filter_by(name=country_str).first()
+            en_country_str = nameMap.get(country_str, "China")
+            country = self.session.query(Country).filter_by(en_name=country_str).first()
             if country:
-                country.num = country.num
+                country.num = country.num + 1
                 country_list.append(country)
             else:
                 country_list.append(Country(country_str, en_country_str, 1))
