@@ -30,27 +30,31 @@ def rate():
 @app.route('/search')
 def search():
     movie_list = []
-    des = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(12).all()
+    have_name = set()
+    des = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(50).all()
     for item in des:
-        movie = {}
-
-        movie['tag'] = item.tags
-        movie['languages'] = item.languages
-        movie['countries'] = item.countrys
-        movie['name'] = item.name
-        movie['director'] = item.director
-        movie['scriptwriter'] = item.screenwriter
-        movie['length'] = item.length
-        movie['othername'] = item.othername
-        movie['score'] = item.score
-        movie['release_time'] = item.release_time
-        movie['mainactors'] = item.mainactors
-        movie['cover'] = item.cover
-        movie['summary'] = item.summary
-        movie['imdblink'] = item.imdb_url
-        movie['shortcomnum'] = item.shortcomnum
-        movie['commentnum'] = item.commentnum
-        movie_list.append(movie)
+        if item.name not in have_name:
+            movie = {}
+            movie['tag'] = item.tags
+            movie['languages'] = item.languages
+            movie['countries'] = item.countrys
+            movie['name'] = item.name
+            movie['director'] = item.director
+            movie['scriptwriter'] = item.screenwriter
+            movie['length'] = item.length
+            movie['othername'] = item.othername
+            movie['score'] = item.score
+            movie['release_time'] = item.release_time
+            movie['mainactors'] = item.mainactors
+            movie['cover'] = item.cover
+            movie['summary'] = item.summary
+            movie['imdblink'] = item.imdb_url
+            movie['shortcomnum'] = item.shortcomnum
+            movie['commentnum'] = item.commentnum
+            movie_list.append(movie)
+            have_name.add(item.name)
+            if len(movie_list) > 20:
+                break
     return render_template('search.html', movies=movie_list)
 
 

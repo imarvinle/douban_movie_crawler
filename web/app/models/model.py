@@ -128,6 +128,7 @@ class ShortComment(db.Model):
 
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    avatar = db.Column(db.String(150))
     movie_name = db.Column(db.String(100), index=True)
     nickname = db.Column(db.String(60), nullable=True)
     time = db.Column(db.String(60), nullable=True)
@@ -152,6 +153,7 @@ class Comment(db.Model):
 
     #  主键
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    avatar = db.Column(db.String(150))
     movie_name = db.Column(db.String(100), index=True)
     nickname = db.Column(db.String(60), nullable=True)
     time = db.Column(db.String(60), nullable=True)

@@ -5,8 +5,8 @@
 from app import db, app
 from app.models.model import Tag
 from app.models.model import Movie
-from app.models.model import Language, Country
-from flask import jsonify, request
+from app.models.model import Language, Country, ShortComment, Comment
+from flask import jsonify, request, render_template
 from functools import reduce
 
 
@@ -60,7 +60,6 @@ def country_static():
         data.append({'value': country.num, 'name': country.en_name})
     return jsonify({'data': data})
 
-
 @app.route("/movie/year")
 def year_produce():
     year_num = db.session.query(Movie.year, db.func.count('*').label('year_group')).group_by(Movie.year).all()
@@ -89,69 +88,95 @@ def relationl():
     length = db.session.query(Movie.length, Movie.score).all()
     return jsonify({'data': length})
 
+@app.route("/movie/heat")
+def getheat():
+    movie_list = []
+    com_list = []
+    have_name = set()
+    movies = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(40).all()
+    for movie in movies:
+        name = movie.name
+        if name not in have_name:
+            shortcomnum = movie.shortcomnum
+            movie_list.append(name)
+            com_list.append(shortcomnum)
+            have_name.add(name)
+            if len(com_list) >=8:
+                break
+    return jsonify({'movies': movie_list, 'comments': com_list})
 
-# @app.route("/movie/description")
-# def description():
-#     movie_list = []
-#     des = Movie.query.order_by(db.desc(Movie.score)).limit(10).all()
-#     for item in des:
-#         movie = {}
-#         tags = item.tags.all()
-#         languages = item.languages.all()
-#         countries = item.countries.all()
-#         movie['tag'] = reduce(lambda x, y: x+"/"+y, map(lambda x : x.name, tags))
-#         movie['languages'] = reduce(lambda x, y: x+" "+y, map(lambda x: x.name, languages))
-#         movie['countries'] = reduce(lambda x, y: x+" "+y, map(lambda x: x.name, countries))
-#         movie['name'] = item.name
-#         movie['director'] = item.director
-#         movie['scriptwriter'] = item.screenwriter
-#         movie['length'] = item.length
-#         movie['othername'] = item.othername
-#         movie['score'] = item.score
-#         movie['release_time'] = item.release_time
-#         movie['mainactors'] = item.mainactors
-#         movie['cover'] = item.cover
-#         movie['summary'] = item.summary
-#         movie['imdblink'] = item.imdb_url
-#         movie_list.append(movie)
-#
-#     return jsonify({'data': movie_list})
-#
+@app.route("/movie/shortcom/<name>")
+def passing(name=''):
+    comments_list = []
+    name = name
+    hava_nickname = set()
+    comments = ShortComment.query.filter(ShortComment.movie_name == name).order_by(db.desc(ShortComment.likenum)).limit(60).all()
+    for item in comments:
+        if item.nickname not in hava_nickname:
+            comment = {}
+            comment['name'] = item.movie_name
+            comment['nickname'] = item.nickname
+            comment['time'] = item.time
+            comment['content'] = item.content
+            comment['likenum'] = item.likenum
+            comment['avatar'] = item.avatar
+            comments_list.append(comment)
+            hava_nickname.add(item.nickname)
+            if len(comments_list) >= 20:
+                break
+    return render_template('shortcom.html', comments=comments_list)
+
+@app.route("/movie/comment/<name>")
+def comment(name=''):
+    comments_list = []
+    have_nickname = set()
+    name = name
+    comments = Comment.query.filter(Comment.movie_name == name).order_by(db.desc(Comment.usednum)).limit(60).all()
+    for item in comments:
+        if item.nickname not in have_nickname:
+            comment = {}
+            comment['name'] = item.movie_name
+            comment['id'] = item.id
+            comment['nickname'] = item.nickname
+            comment['usefulnum'] = item.usednum
+            comment['uselessnum'] = item.unusednum
+            comment['responsenum'] = item.responsenum
+            comment['time'] = item.time
+            comment['avatar'] = item.avatar
+            comment['content'] = item.content
+            comments_list.append(comment)
+            have_nickname.add(item.nickname)
+            if len(comments_list) >= 20:
+                break
+    return render_template('comment.html', comments=comments_list)
 
 @app.route("/movie/keyword", methods=['POST'])
 def keyword():
     movie_list = []
+    have_name = set()
     data = request.form
     keyword = data['keyword']
-    movie_result = Movie.query.filter(Movie.name.like('%'+keyword+'%')).limit(10).all()
+    movie_result = Movie.query.filter(Movie.name.like('%'+keyword+'%')).all()
     for item in movie_result:
-        movie = {}
-        movie['tag'] = item.tags
-        movie['languages'] = item.languages
-        movie['countries'] = item.countrys
-        movie['name'] = item.name
-        movie['director'] = item.director
-        movie['scriptwriter'] = item.screenwriter
-        movie['length'] = item.length
-        movie['othername'] = item.othername
-        movie['score'] = item.score
-        movie['release_time'] = item.release_time
-        movie['mainactors'] = item.mainactors
-        movie['cover'] = item.cover
-        movie['summary'] = item.summary
-        movie['imdblink'] = item.imdb_url
-        movie['shortcomnum'] = item.shortcomnum
-        movie['commentnum'] = item.commentnum
-        movie_list.append(movie)
+        if item.name not in have_name:
+            movie = {}
+            movie['tag'] = item.tags
+            movie['languages'] = item.languages
+            movie['countries'] = item.countrys
+            movie['name'] = item.name
+            movie['director'] = item.director
+            movie['scriptwriter'] = item.screenwriter
+            movie['length'] = item.length
+            movie['othername'] = item.othername
+            movie['score'] = item.score
+            movie['release_time'] = item.release_time
+            movie['mainactors'] = item.mainactors
+            movie['cover'] = item.cover
+            movie['summary'] = item.summary
+            movie['imdblink'] = item.imdb_url
+            movie['shortcomnum'] = item.shortcomnum
+            movie['commentnum'] = item.commentnum
+            movie_list.append(movie)
+            have_name.add(item.name)
     
     return jsonify({'data': movie_list})
-
-# @app.route("/movie/keyword", methods=['POST'])
-# def keyword():
-#     movie_list = []
-#     data = request.form
-#     keyword = data['keyword']
-#     res = Movie.query.filter(Movie.name.like('%%%'+keyword+'%').all()
-#     for item in res:
-#         print('hello')
-#     return jsonify({"movies": movie_list})

@@ -1,0 +1,137 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>豆瓣电影信息采集</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<base href="/">
+	<!-- CSS -->
+	<!-- Bootstrap CSS
+============================================ -->
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<!-- Icon Font CSS
+============================================ -->
+	<link rel="stylesheet" href="/static/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+	<!-- Plugins CSS
+============================================ -->
+	<link rel="stylesheet" href="/static/css/plugins.css">
+	<!-- Style CSS
+============================================ -->
+	<link rel="stylesheet" href="/static/css/style.css">
+	<!-- Modernizer JS
+============================================ -->
+	<script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+	<script src="/static/js/jquery-3.3.1.min.js"></script>
+
+<body>
+	<!-- Body main wrapper start -->
+	<div class="wrapper fix">
+
+		<!-- Header Area Start -->
+		<div id="header-area" class="header-area section">
+
+			<!-- Header Bottom Start -->
+			<div class="header-bottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+
+							<div class="navbar-header">
+								<button class="menu-toggle navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu">
+									<i class="zmdi open zmdi-menu"></i>
+									<i class="zmdi close zmdi-close"></i>
+								</button>
+							</div>
+
+							<!---- Menu ---->
+							<div id="main-menu" class="main-menu onepage-nav collapse navbar-collapse float-right">
+								<nav>
+									<ul>
+										<li class="active"><a href="/index">主页</a></li>
+										<li><a href="/index#pie_chart">饼图分析</a></li>
+										<li><a href="/index#district_map">电影分布</a></li>
+										<li><a href="/index#line_chart">趋势分析</a></li>
+										<li><a href="/rate">数据分析</a></li>
+										<li><a href="/search">电影列表</a></li>
+									</ul>
+								</nav>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Header Bottom End -->
+		</div>
+		<!-- Header Area End -->
+
+		<!-- About Area Start -->
+		{% for item in comments %}
+		<div id="about-area" class="about-area section pb-120 pt-120">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+
+						<div class="about-image float-left hidden-sm" style="width: 50px;height: 100px;"><img src={{item.avatar}} alt=""></div>
+
+						<div class="about-content fix">
+							<h1>{{item.nickname}}<span>评论</span></h1>
+							<h4>{{item.time}}</h4>
+							<p>{{item.content}}</p>
+
+							<div class="funfact fix">
+
+								<div class="single-funfact text-center">
+									<h2 class="counter">{{item.likenum}}</h2>
+									<p>喜爱人数</p>
+								</div>
+
+								<!-- <div class="single-funfact text-center">
+                            <h2 class="counter">10</h2>
+                            <p>Bedrooms</p>
+                        </div>
+                        
+                        <div class="single-funfact text-center">
+                            <h2 class="counter"></h2>
+                            <p></p>
+                        </div>
+                        
+                        <div class="single-funfact text-center">
+                            <h2 class="counter"></h2>
+                            <p></p>
+                        </div> -->
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		<!-- About Area End -->
+		<!-- JS -->
+
+		<!-- jQuery JS
+============================================ -->
+		<script src="/static/js/vendor/jquery-1.12.0.min.js"></script>
+		<!-- Bootstrap JS
+============================================ -->
+		<script src="/static/js/bootstrap.min.js"></script>
+		<!-- Plugins JS
+============================================ -->
+		<script src="/static/js/plugins.js"></script>
+		<!-- Ajax Mail JS
+============================================ -->
+		<script src="/static/js/ajax-mail.js"></script>
+		<!-- Main JS
+============================================ -->
+		<script src="/static/js/main.js"></script>
+	</div>
+</body>

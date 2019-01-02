@@ -201,8 +201,8 @@
                         <p>语言:&nbsp;&nbsp;{{item.languages}}</p>
                         <p>片长:&nbsp;&nbsp;{{item.length}}分钟</p>
                         <p>又名:&nbsp;&nbsp;{{item.othername}}</p>
-                        <p>影评:&nbsp;&nbsp;{{item.commentnum}}条</p>
-                        <p>短评:&nbsp;&nbsp;{{item.shortcomnum}}条</p>
+                        <p>影评:&nbsp;&nbsp;{{item.commentnum}}条&nbsp;&nbsp;<a href=/movie/comment/{{item.name}}>(查看)</a></p>
+                        <p>短评:&nbsp;&nbsp;{{item.shortcomnum}}条&nbsp;&nbsp;<a href=/movie/shortcom/{{item.name}}>(查看)</a></p>
                         <h5 style="color:#555;">剧情简介</h5>
                         <p style="text-indent:2em;color:#777;">
                             {{item.summary}}
@@ -241,7 +241,7 @@
                                     for (var i = 0; i < movies.length; i++) {
                                         var item = '<div class="movie"><a href="' + movies[i]["cover"] + '" target="_blank"><div class="movie_cover" style="background-image:url(' + movies[i]["cover"] + ')"></div></a><div class="movie_info"><h4><a href="' + movies[i]["imdblink"] + '" target="_blank">' + movies[i]["name"] + '</a><span style="color:#44A031;font-size:14px;margin-left:5px;">';
                                         item = item + movies[i]["release_time"];
-                                        item = item + '</span><span style="color:#FB5151;font-size:14px;margin-left:5px;">' + movies[i]["score"] + '分</span></h4><p>导演:&nbsp;&nbsp;' + movies[i]["director"] + '</p><p>编剧:&nbsp;&nbsp;' + movies[i]["scriptwriter"] + '</p><p>主演:&nbsp;&nbsp;' + movies[i]["mainactors"] + '</p><p>类型:&nbsp;&nbsp;' + movies[i]["tag"] + '</p><p>产地:&nbsp;&nbsp;' + movies[i]["countries"] + '</p><p>语言:&nbsp;&nbsp;' + movies[i]["languages"] + '</p><p>片长:&nbsp;&nbsp;' + movies[i]["length"] + '分钟</p><p>又名:&nbsp;&nbsp;' + movies[i]["othername"] + '</p><p>影评:&nbsp;&nbsp;' + movies[i]["commentnum"] + '条</p><p>短评:&nbsp;&nbsp;' + movies[i]["shortcomnum"] + '条</p><h5 style="color:#555;">剧情简介</h5><p style="text-indent:2em;color:#777;">';
+                                        item = item + '</span><span style="color:#FB5151;font-size:14px;margin-left:5px;">' + movies[i]["score"] + '分</span></h4><p>导演:&nbsp;&nbsp;' + movies[i]["director"] + '</p><p>编剧:&nbsp;&nbsp;' + movies[i]["scriptwriter"] + '</p><p>主演:&nbsp;&nbsp;' + movies[i]["mainactors"] + '</p><p>类型:&nbsp;&nbsp;' + movies[i]["tag"] + '</p><p>产地:&nbsp;&nbsp;' + movies[i]["countries"] + '</p><p>语言:&nbsp;&nbsp;' + movies[i]["languages"] + '</p><p>片长:&nbsp;&nbsp;' + movies[i]["length"] + '分钟</p><p>又名:&nbsp;&nbsp;' + movies[i]["othername"] + '</p><p>影评:&nbsp;&nbsp;' + movies[i]["commentnum"] + '条&nbsp;&nbsp;<a href=/movie/comment/' + movies[i]["name"] + '>(查看)</a>' + '</p><p>短评:&nbsp;&nbsp;' + movies[i]["shortcomnum"] + '条&nbsp;&nbsp;<a href=/movie/shortcom/' + movies[i]["name"] + '>(查看)</a>' + '</p><h5 style="color:#555;">剧情简介</h5><p style="text-indent:2em;color:#777;">';
                                         item = item + movies[i]['summary'] + '<br/>';
                                         item = item + '</p></div></div>';
                                         $('#search #searchResult').append(item);
@@ -255,3 +255,4 @@
                 </script>
 </div>
 </body>
+</html>>
