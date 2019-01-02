@@ -37,7 +37,7 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
         if not res["result"]:
             print("电影<%s> 第 %d 页影评爬取失败\n" % (movie_name, i+1))
             errornum = errornum + 1
-            if errornum > 6:
+            if errornum > 100:
                 print(" 停止爬取电影 <%s> 影评共爬取 %d 页\n" % (movie_name, i))
                 break
             else:
@@ -88,7 +88,7 @@ def craw_comment_list(movie_id, movie_name, commentnum, db_queue):
             info = traceback.format_exc()
             print(info)
             errornum = errornum + 1
-            if errornum > 6:
+            if errornum > 100:
                 print(" 停止爬取电影 <%s> 影评共爬取 %d 页\n" % (movie_name, i))
                 break
             else:
