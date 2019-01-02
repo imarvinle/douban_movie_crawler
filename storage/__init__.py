@@ -20,10 +20,7 @@ engine = create_engine(DATABASE_URI)
 
 Base.metadata.create_all(engine)
 
-session_list = []
-for i in range(DataBaseInsertSize):
-    session_factory = sessionmaker(bind=engine)
-    Session = scoped_session(session_factory)
-    session_list.append(Session)
+session_factory = sessionmaker(bind=engine)
+Session = scoped_session(session_factory)
 
 

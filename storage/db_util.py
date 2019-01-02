@@ -9,13 +9,12 @@
 -------------------------------------------------
 '''
 
-from storage import session_list
+from storage import Session
 from storage.map_config import nameMap, language_map
 from storage.model import Movie, Tag, Country, Language
 import random
 
 def db_operate(type = None, value = None):
-        Session = random.choice(session_list)
         session = Session()
         db_helper = DB_Helper(session)
         if type == "movie":
