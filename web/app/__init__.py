@@ -31,7 +31,7 @@ def rate():
 def search():
     movie_list = []
     have_name = set()
-    des = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(50).all()
+    des = Movie.query.order_by(db.desc(Movie.shortcomnum)).limit(100).all()
     for item in des:
         if item.name not in have_name:
             movie = {}
@@ -53,7 +53,7 @@ def search():
             movie['commentnum'] = item.commentnum
             movie_list.append(movie)
             have_name.add(item.name)
-            if len(movie_list) > 20:
+            if len(movie_list) > 30:
                 break
     return render_template('search.html', movies=movie_list)
 

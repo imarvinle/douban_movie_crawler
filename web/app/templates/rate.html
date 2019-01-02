@@ -189,7 +189,7 @@
         <script>
             var showTimeData = [];
             var lengthData = [];
-
+            var base_url = "http://localhost:5000"
             var rateStat = echarts.init(document.getElementById('basic'), 'infographic');
             option = {
                 title: {
@@ -223,7 +223,7 @@
             rateStat.setOption(option);
 
             rateStat.showLoading();
-            $.get("http://localhost:5000/movie/rateline").done(function (data) {
+            $.get(base_url + "/movie/rateline").done(function (data) {
                 // console.log(data);
                 rateStat.hideLoading();
                 var temp_data = data.data;
@@ -267,7 +267,7 @@
             showtime.setOption(showtimeOption);
 
             showtime.showLoading();
-            $.get("http://localhost:5000/movie/year_relation").done(function (data) {
+            $.get(base_url+"/movie/year_relation").done(function (data) {
                 // console.log(data);
                 showtime.hideLoading();
                 var temp_data = data.data;
@@ -311,7 +311,7 @@
             length.setOption(lengthOption);
 
             length.showLoading();
-            $.get("http://localhost:5000/movie/length_relation").done(function (data) {
+            $.get(base_url+"/movie/length_relation").done(function (data) {
                 // console.log(data);
                 length.hideLoading();
                 var temp_data = data.data;
@@ -360,7 +360,7 @@
             heat.setOption(heatOption);
 
             heat.showLoading;
-            $.get("http://localhost:5000/movie/heat").done(function (data) {
+            $.get(base_url + "/movie/heat").done(function (data) {
                 // console.log(data);
                 heat.hideLoading();
                 var movie_list = data.movies;

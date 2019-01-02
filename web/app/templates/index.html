@@ -151,6 +151,7 @@
             <div id="language_type" style="width: 33%;height:400px; display: inline-block;"></div>
             <script type="text/javascript">
                 // 基于准备好的dom，初始化echarts实例
+                var base_url = "http://localhost:5000"
                 var myMovieChart = echarts.init(document.getElementById('movie_type'), 'infographic');
                 // 指定图表的配置项和数据
                 var option = {
@@ -176,7 +177,7 @@
                 myMovieChart.setOption(option);
 
                 myMovieChart.showLoading();
-                $.get("http://localhost:5000/movie/tag").done(function (data) {
+                $.get(base_url + "/movie/tag").done(function (data) {
                     myMovieChart.hideLoading()
                     // console.log(data);
                     var temp_data = data.data;
@@ -215,7 +216,7 @@
                 myDirectorChart.setOption(option);
 
                 myDirectorChart.showLoading();
-                $.get("http://localhost:5000/movie/director").done(function (data) {
+                $.get(base_url + "/movie/director").done(function (data) {
                     // console.log(data);
                     myDirectorChart.hideLoading();
                     var temp_data = data.data;
@@ -254,7 +255,7 @@
                 myLanguageChart.setOption(option);
 
                 myLanguageChart.showLoading();
-                $.get("http://localhost:5000/movie/language").done(function (data) {
+                $.get(base_url + "/movie/language").done(function (data) {
                     // console.log(data);
                     myLanguageChart.hideLoading();
                     var temp_data = data.data;
@@ -315,7 +316,7 @@
                     myDistrictMap.setOption(option);
 
                     myDistrictMap.showLoading();
-                    $.get("http://localhost:5000/movie/country").done(function (data) {
+                    $.get(base_url + "/movie/country").done(function (data) {
                         // console.log(data);
                         myDistrictMap.hideLoading();
                         var temp_data = data.data;
@@ -369,7 +370,7 @@
                 myYearLine.setOption(option);
 
                 myYearLine.showLoading();
-                $.get("http://localhost:5000/movie/year").done(function (data) {
+                $.get(base_url + "/movie/year").done(function (data) {
                     // console.log(data);
                     myYearLine.hideLoading();
                     var temp_data = data.data;
@@ -416,7 +417,7 @@
                 myTimeLine.setOption(option);
 
                 myTimeLine.showLoading();
-                $.get("http://localhost:5000/movie/length").done(function (data) {
+                $.get(base_url + "/movie/length").done(function (data) {
                     // console.log(data);
                     myTimeLine.hideLoading();
                     var temp_data = data.data;
