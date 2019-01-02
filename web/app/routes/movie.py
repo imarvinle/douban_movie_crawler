@@ -8,22 +8,35 @@ from app.models.model import Movie
 from app.models.model import Language, Country, ShortComment, Comment
 from flask import jsonify, request, render_template
 from functools import reduce
-
+from app.routes.name_map import nameMap
 
 @app.route("/movie/tag")
 def tag_num_list():
-    threshold = 20
-    data = []
-    tags = Tag.query.all()
-    tags = list(map(lambda x : {"value": x.num, "name": x.name}, tags))
-    tags = sorted(tags, key=lambda x : x["value"], reverse=True)
-    if len(tags) > threshold:
-        data.extend(tags[0:threshold])
-        other_num = reduce(lambda x, y: x + y, map(lambda x: x["value"], tags[threshold:-1]))
-        data.append({"name": "其它", "value": other_num})
-    else:
-        data = tags
-
+    # threshold = 20
+    # data = []
+    # tags = Tag.query.all()
+    # tags = list(map(lambda x : {"value": x.num, "name": x.name}, tags))
+    # tags = sorted(tags, key=lambda x : x["value"], reverse=True)
+    # if len(tags) > threshold:
+    #     data.extend(tags[0:threshold])
+    #     other_num = reduce(lambda x, y: x + y, map(lambda x: x["value"], tags[threshold:-1]))
+    #     data.append({"name": "其它", "value": other_num})
+    # else:
+    #     data = tags
+    #
+    # return jsonify({"data": data})
+    data  = []
+    movies = db.session.query(Movie.tags).all()
+    tag_map = {}
+    for movie in movies:
+        tags = movie[0].split("/")
+        for tag in tags:
+            if tag.strip() in tag_map:
+                tag_map[tag.strip()] = tag_map[tag.strip()] + 1
+            else:
+                tag_map[tag.strip()] = 1
+    for item in tag_map.items():
+        data.append({"name" : item[0], "value" : item[1]})
     return jsonify({"data": data})
 
 
@@ -31,7 +44,6 @@ def tag_num_list():
 @app.route("/movie/director")
 def director_movies_num():
     data = []
-    #directors = db.session.query(Movie.director, db.func.count('*').label('director_group')).group_by(Movie.director).all()
     directors = db.session.query(Movie.name, Movie.director).all()
     director_map = {}
 
@@ -47,13 +59,6 @@ def director_movies_num():
             movie_set = set()
             movie_set.add(one[0])
             director_map[one[1]] = movie_set
-    # new_directors = []
-    # for director in directors:
-    #     if director[0] != "" and director[0] != " ":
-    #         new_directors.append(director)
-    # directors = sorted(new_directors, key=lambda x: x[1],  reverse=True)[0:10]
-    # for director in directors:
-    #     data.append({'value': director[1], 'name': director[0]})
     temp_data = sorted(director_map.items(), key=lambda x : len(x[1]), reverse=True)[0:10]
     for item in temp_data:
         data.append({"value": len(item[1]), "name": item[0]})
@@ -65,20 +70,38 @@ def director_movies_num():
 @app.route("/movie/language")
 def language_static():
     data = []
-    languages = Language.query.all()
-    for language in languages:
-        data.append({'value': language.num, 'name': language.name})
-    data = sorted(data, key=lambda x: x['value'], reverse=True)[0:10]
-    return jsonify({'data': data})
+    movies = db.session.query(Movie.languages).all()
+    language_map = {}
+    for language in movies:
+        languages = language[0].split("/")
+        for one in languages:
+            if one.strip() in language_map:
+                language_map[one.strip()] = language_map[one.strip()] + 1
+            else:
+                language_map[one.strip()] = 1
+    for item in language_map.items():
+        data.append({"name": item[0], "value": item[1]})
+    data = sorted(data, key=lambda  x: x["value"], reverse=True)[0:15]
+    return jsonify({"data": data})
 
 
 @app.route("/movie/country")
 def country_static():
     data = []
-    countrys = Country.query.all()
-    for country in countrys:
-        data.append({'value': country.num, 'name': country.en_name})
-    return jsonify({'data': data})
+    movies = db.session.query(Movie.countrys).all()
+    language_map = {}
+    for language in movies:
+        languages = language[0].split("/")
+        for one in languages:
+            country_str = nameMap.get(one.strip(), "China")
+            if country_str in language_map:
+                language_map[country_str] = language_map[country_str] + 1
+            else:
+                language_map[country_str] = 1
+    for item in language_map.items():
+        data.append({"name": item[0], "value": item[1]})
+    return jsonify({"data": data})
+
 
 @app.route("/movie/year")
 def year_produce():
