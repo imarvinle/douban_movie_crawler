@@ -111,6 +111,9 @@ def passing(name=''):
     name = name
     hava_nickname = set()
     comments = ShortComment.query.filter(ShortComment.movie_name == name).order_by(db.desc(ShortComment.likenum)).limit(60).all()
+    if len(comments) < 30:
+        new_comments = ShortComment.query.limit(60-len(comments)).all()
+        comments.extend(new_comments)
     for item in comments:
         if item.nickname not in hava_nickname:
             comment = {}
@@ -132,6 +135,9 @@ def comment(name=''):
     have_nickname = set()
     name = name
     comments = Comment.query.filter(Comment.movie_name == name).order_by(db.desc(Comment.usednum)).limit(60).all()
+    if len(comments) < 30:
+        new_comments = Comment.query.limit(60 - len(comments)).all()
+        comments.extend(new_comments)
     for item in comments:
         if item.nickname not in have_nickname:
             comment = {}
