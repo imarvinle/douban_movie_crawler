@@ -19,9 +19,9 @@ from urllib import parse
 
 from bs4 import BeautifulSoup
 
-from crawers import MyOpener
-from crawers.comment import craw_comment_list
-from crawers.shortcomment import craw_shortcomment
+from crawler import MyOpener
+from crawler.comment import craw_comment_list
+from crawler.shortcomment import craw_shortcomment
 from storage.db_util import db_operate
 from main import all_movie_name
 

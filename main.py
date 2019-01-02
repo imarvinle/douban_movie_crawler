@@ -11,13 +11,13 @@
 
 from queue import Queue
 
-from crawers.movie import *
+from crawler.movie import *
 from thread.thread_pool import *
 from storage import Session
 from storage.model import Movie, ShortCommentCrawed, CommentCrawed
-from crawers.comment import craw_comment_list
-from crawers.shortcomment import craw_shortcomment
-from crawers import MyOpener
+from crawler.comment import craw_comment_list
+from crawler.shortcomment import craw_shortcomment
+from crawler import MyOpener
 from config import TagThreadSize, MovieThreadSize, ShortCommentSize, CommentSize, DataBaseInsertSize
 
 ISOTIMEFORMAT='%Y-%m-%d %X'

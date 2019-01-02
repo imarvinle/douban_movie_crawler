@@ -14,7 +14,7 @@ import time
 import traceback
 from bs4 import BeautifulSoup
 from storage.db_util import db_operate
-from crawers import MyOpener
+from crawler import MyOpener
 from storage.model import CommentCrawed, Comment
 
 

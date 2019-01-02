@@ -15,7 +15,7 @@ import traceback
 
 from bs4 import BeautifulSoup
 
-from crawers import MyOpener
+from crawler import MyOpener
 from storage.db_util import db_operate
 from storage.model import ShortComment, ShortCommentCrawed
 

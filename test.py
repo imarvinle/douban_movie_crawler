@@ -15,7 +15,7 @@ from urllib import parse
 
 import requests
 
-from crawers import MyOpener as Opner
+from crawler import MyOpener as Opner
 
 
 def craw_movie_id(tag, movie_queue, short_queue, comment_queue, db_queue):
@@ -155,5 +155,5 @@ class MyOpener():
 # reload(sys)
 # sys('utf8')
 
-from crawers.movie import Moview_Crawer
+from crawler.movie import Moview_Crawer
 
