@@ -34,7 +34,10 @@ def director_movies_num():
     #directors = db.session.query(Movie.director, db.func.count('*').label('director_group')).group_by(Movie.director).all()
     directors = db.session.query(Movie.name, Movie.director).all()
     director_map = {}
+
     for one in directors:
+        if one[1] == "" or one[1] == " ":
+            continue
         if one[1] in director_map:
             movie_set = director_map[one[1]]
             if one[0] not in movie_set:
