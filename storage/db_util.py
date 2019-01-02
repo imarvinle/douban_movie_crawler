@@ -40,12 +40,12 @@ class DB_Helper():
         tags = ""
         for tag_str in movie.tags:
             tags = tags + "/" + tag_str
-            tag = self.session.query(Tag).filter_by(name=tag_str).first()
-            if tag:
-                tag.num = tag.num + 1
-                tag_list.append(tag)
-            else:
-                tag_list.append(Tag(tag_str, 1))
+            # tag = self.session.query(Tag).filter_by(name=tag_str).first()
+            # if tag:
+            #     tag.num = tag.num + 1
+            #     tag_list.append(tag)
+            # else:
+            #     tag_list.append(Tag(tag_str, 1))
         tags = tags.strip("/")
 
         country_list = []
@@ -66,12 +66,12 @@ class DB_Helper():
         for language_str in movie.languages:
             language_str = language_map.get(language_str, language_str)
             languages = languages + "/" + language_str
-            language = self.session.query(Language).filter_by(name=language_str).first()
-            if language:
-                language.num = language.num + 1
-                language_list.append(language)
-            else:
-                language_list.append(Language(language_str, 1))
+            # language = self.session.query(Language).filter_by(name=language_str).first()
+            # if language:
+            #     language.num = language.num + 1
+            #     language_list.append(language)
+            #else:
+            language_list.append(Language(language_str, 1))
         languages = languages.strip("/")
         new_movie = None
         try:

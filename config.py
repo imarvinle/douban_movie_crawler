@@ -21,8 +21,8 @@ DATABASE_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8mb4'.format(DIALECT, DRIVER, 
 
 
 # Configure the thread info
-TagThreadSize = 0
-MovieThreadSize = 0
-ShortCommentSize = 2
-CommentSize = 2
-DataBaseInsertSize = 4
+TagThreadSize = 1
+MovieThreadSize = 2
+ShortCommentSize = 0
+CommentSize = 0
+DataBaseInsertSize = 2
