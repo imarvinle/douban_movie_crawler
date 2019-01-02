@@ -31,14 +31,31 @@ def tag_num_list():
 @app.route("/movie/director")
 def director_movies_num():
     data = []
-    directors = db.session.query(Movie.director, db.func.count('*').label('director_group')).group_by(Movie.director).all()
-    new_directors = []
-    for director in directors:
-        if director[0] != "" and director[0] != " ":
-            new_directors.append(director)
-    directors = sorted(new_directors, key=lambda x: x[1],  reverse=True)[0:10]
-    for director in directors:
-        data.append({'value': director[1], 'name': director[0]})
+    #directors = db.session.query(Movie.director, db.func.count('*').label('director_group')).group_by(Movie.director).all()
+    directors = db.session.query(Movie.name, Movie.director).all()
+    director_map = {}
+    for one in directors:
+        if one[1] in director_map:
+            movie_set = director_map[one[1]]
+            if one[0] not in movie_set:
+                movie_set.add(one[0])
+                director_map[one[1]] = movie_set
+        else:
+            movie_set = set()
+            movie_set.add(one[0])
+            director_map[one[1]] = movie_set
+    # new_directors = []
+    # for director in directors:
+    #     if director[0] != "" and director[0] != " ":
+    #         new_directors.append(director)
+    # directors = sorted(new_directors, key=lambda x: x[1],  reverse=True)[0:10]
+    # for director in directors:
+    #     data.append({'value': director[1], 'name': director[0]})
+    temp_data = sorted(director_map.items(), key=lambda x : len(x[1]), reverse=True)[0:10]
+    for item in temp_data:
+        data.append({"value": len(item[1]), "name": item[0]})
+
+
     return jsonify({'data': data})
 
 
