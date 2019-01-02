@@ -12,7 +12,6 @@
 from storage import Session
 from storage.map_config import nameMap, language_map
 from storage.model import Movie, Tag, Country, Language
-import random
 
 def db_operate(type = None, value = None):
         session = Session()
@@ -58,7 +57,7 @@ class DB_Helper():
             #     country.num = country.num + 1
             #     country_list.append(country)
             # else:
-            country_list.append(Country(country_str, en_country_str, 1))
+            #country_list.append(Country(country_str, en_country_str, 1))
         countrys = countrys.strip("/")
 
         language_list = []
@@ -71,7 +70,7 @@ class DB_Helper():
             #     language.num = language.num + 1
             #     language_list.append(language)
             #else:
-            language_list.append(Language(language_str, 1))
+            #language_list.append(Language(language_str, 1))
         languages = languages.strip("/")
         new_movie = None
         try:
